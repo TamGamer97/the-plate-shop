@@ -91,3 +91,4 @@ All content can be edited directly in `index.html`.
 - Include a gallery of customer plates
 - Add more detailed product pages
 
+"# the-plate-shop" 
