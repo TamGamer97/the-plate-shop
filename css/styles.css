@@ -66,7 +66,7 @@ h1, h2, h3 {
 }
 
 .logo-bubble img {
-    max-height: 50px;
+    max-height: 80px;
     width: auto;
     display: block;
 }
@@ -924,7 +924,7 @@ h1, h2, h3 {
     }
 
     .logo-bubble img {
-        max-height: 40px;
+        max-height: 55px;
     }
 
     .menu-toggle {
@@ -958,6 +958,10 @@ h1, h2, h3 {
 
     .hero-logo-bubble img {
         max-width: 140px;
+    }
+
+    .hero-content {
+        padding-top: 120px;
     }
 
     .hero-title {
