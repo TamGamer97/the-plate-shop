@@ -43,11 +43,11 @@ ThePlateShop/
 │   ├── *.jpeg            # Product and hero images
 │   ├── *.png             # Icons and logos
 │   └── *.jpg             # Background images
-├── scripts/               # Python extraction scripts
+├── python/                # Python extraction scripts
 │   ├── extract_images.py
 │   ├── extract_images_v2.py
 │   └── extract_simple.py
-└── archive/               # Archived files
+└── old_version/           # Archived files
     └── THE PLATE SHOP.mhtml
 ```
 
