@@ -18,20 +18,36 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="#home" class="logo-bubble">
-                <img src="images/New-logo-transparent.png" alt="THE PLATE SHOP Logo" style="max-height: 80px; width: auto;">
+                <img src="images/New-logo-transparent.png" alt="THE PLATE SHOP Logo">
             </a>
-            <button class="menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <div class="nav-actions">
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="cart-widget">
+                    <button type="button" class="cart-toggle" aria-label="Open basket" aria-expanded="false" aria-controls="cartDropdown">
+                        <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45a2 2 0 0 0 1.75 2.96h9.75v-2H12.41a.25.25 0 0 1-.22-.37L13 14h6.45a2 2 0 0 0 1.92-1.45L22 6H6.21l-.94-2H7zM9 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                        </svg>
+                        <span class="cart-count" data-cart-count>0</span>
+                    </button>
+                    <div id="cartDropdown" class="cart-dropdown" hidden>
+                        <div class="cart-dropdown-header">Your Basket</div>
+                        <div class="cart-dropdown-items" data-cart-preview></div>
+                        <a href="basket.html" class="btn btn-primary cart-dropdown-cta">View Basket</a>
+                    </div>
+                </div>
+                <button type="button" class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
+        <div class="nav-backdrop" hidden aria-hidden="true"></div>
     </nav>
 
     <!-- Hero Section -->
@@ -51,7 +67,7 @@
             </p>
             <div class="hero-buttons">
                 <a href="#plates" class="btn btn-primary">START YOUR ORDER</a>
-                <a href="#templates" class="btn btn-secondary">VIEW TEMPLATES</a>
+                <a href="#plates" class="btn btn-secondary">VIEW TEMPLATES</a>
             </div>
         </div>
     </section>
@@ -62,68 +78,77 @@
             <h2 class="section-title">CHOOSE YOUR PLATE TYPE</h2>
             <p class="section-subtitle">Select Your Style</p>
             <div class="plates-grid">
-                <div class="plate-card">
+                <div class="plate-card" data-product="4d-acrylic">
                     <div class="plate-image">
                         <img src="images/4d Acrylic Plates.jpeg" alt="4D Acrylic Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">4D ACRYLIC PLATES</h3>
                     <p class="plate-description">Deep-cut acrylic layers for a bold, standout look.</p>
+                    <a class="plate-order-link" href="product.html?product=4d-acrylic">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="acrylic-coloured">
                     <div class="plate-image">
                         <img src="images/Acrylic Coloured Plates.jpeg" alt="Acrylic Coloured Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">ACRYLIC COLOURED PLATES</h3>
                     <p class="plate-description">Add a bold touch of personality to your vehicle with our premium.</p>
+                    <a class="plate-order-link" href="product.html?product=acrylic-coloured">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="tinted">
                     <div class="plate-image">
                         <img src="images/Tinted Plates.jpeg" alt="Tinted Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">TINTED PLATES</h3>
                     <p class="plate-description">Smoked finish for a unique appearance (show plates only).</p>
+                    <a class="plate-order-link" href="product.html?product=tinted">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="short">
                     <div class="plate-image">
                         <img src="images/Short Plates.jpeg" alt="Short Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">SHORT PLATES</h3>
                     <p class="plate-description">Compact and stylish plates perfect for private registrations.</p>
+                    <a class="plate-order-link" href="product.html?product=short">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="4d-gel">
                     <div class="plate-image">
                         <img src="images/4d gell plates.jpg" alt="4D Gel Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">4D GEL PLATES</h3>
                     <p class="plate-description">Our premium 4D Gel Plates, designed for drivers who want unmatched depth, shine, and style.</p>
+                    <a class="plate-order-link" href="product.html?product=4d-gel">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="3d-gel">
                     <div class="plate-image">
                         <img src="images/3d gell plates.jpg" alt="3D Gel Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">3D GEL PLATES</h3>
                     <p class="plate-description">Give your vehicle a sleek and stylish upgrade with our premium 3D Gel Plates.</p>
+                    <a class="plate-order-link" href="product.html?product=3d-gel">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="2d-standard">
                     <div class="plate-image">
                         <img src="images/Standard Plates.jpg" alt="Standard 2D Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">STANDARD 2D PLATES</h3>
                     <p class="plate-description">Our Standard 2D Plates offer a clean, classic look that meets all the essentials of everyday driving.</p>
+                    <a class="plate-order-link" href="product.html?product=2d-standard">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="retro">
                     <div class="plate-image">
                         <img src="images/retro plates.jpeg" alt="Retro Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">RETRO (BEVELLED EFFECT) PLATES</h3>
                     <p class="plate-description">Retro Bevel Number Plates are the perfect way to give your car a fresh, premium look with sharp raised black.</p>
+                    <a class="plate-order-link" href="product.html?product=retro">VIEW &amp; ORDER</a>
                 </div>
-                <div class="plate-card">
+                <div class="plate-card" data-product="hex">
                     <div class="plate-image">
                         <img src="images/Hex Plates.jpg" alt="Hex Plates" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <h3 class="plate-title">HEX PLATES</h3>
                     <p class="plate-description">Hex number plates feature a unique hexagonal shape and come in 2D, 3D Gel, 4D, and 5D Gel finishes for the ultimate custom look. Suitable for all vehicles, the hexagon shape adds a luxury touch at an affordable price!</p>
+                    <a class="plate-order-link" href="product.html?product=hex">VIEW &amp; ORDER</a>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 3rem;">
@@ -205,9 +230,15 @@
                 <img src="images/New-logo-transparent.png" alt="The Plate Shop Logo" style="max-width: 150px; margin-bottom: 1rem;">
                 <h3>THE PLATE SHOP</h3>
                 <p>Your personalised plate specialists</p>
-                <div class="social-icons" style="margin-top: 1rem; display: flex; gap: 1rem;">
-                    <a href="https://www.instagram.com/theplateshop_?igsh=eXByMWoydDZndWp4&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="images/instagram+(3).png" alt="Instagram" style="width: 30px; height: 30px;"></a>
-                    <a href="https://wa.me/message/YE2UF7GXJUOQK1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><img src="images/whatsapp+(4).png" alt="WhatsApp" style="width: 30px; height: 30px;"></a>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/theplateshop_?igsh=eXByMWoydDZndWp4&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Instagram">
+                        <img src="images/instagram+(3).png" alt="" class="social-icon-img">
+                    </a>
+                    <a href="https://wa.me/message/YE2UF7GXJUOQK1" target="_blank" rel="noopener noreferrer" class="social-icon-link social-icon-link--whatsapp" aria-label="WhatsApp">
+                        <svg class="whatsapp-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
             <div class="footer-section">
@@ -233,7 +264,9 @@
 
     <!-- Floating WhatsApp Button -->
     <a href="https://wa.me/message/YE2UF7GXJUOQK1" target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Contact us on WhatsApp">
-        <img src="images/whatsapp+(4).png" alt="WhatsApp" style="width: 60px; height: 60px;">
+        <svg class="whatsapp-icon whatsapp-icon--float" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
     </a>
 
     <script src="js/script.js"></script>
