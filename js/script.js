@@ -517,9 +517,6 @@ function initBasketPage() {
     if (!basketNode) return;
 
     const basketEmptyState = document.getElementById('basketEmptyState');
-    const basketHeroCard = document.getElementById('basketHeroCard');
-    const basketHeroCount = document.getElementById('basketHeroCount');
-    const basketHeroSubtotal = document.getElementById('basketHeroSubtotal');
     const itemCountNode = document.getElementById('basketItemCount');
     const subtotalNode = document.getElementById('basketSubtotal');
     const totalNode = document.getElementById('basketGrandTotal');
@@ -557,7 +554,6 @@ function initBasketPage() {
 
         basketNode.innerHTML = '';
         setBasketVisibility(hasItems);
-        basketHeroCard.classList.toggle('has-items', hasItems);
 
         items.forEach(item => {
             const lineTotal = (Number(item.quantity) || 1) * Number(item.unitPrice || 0);
@@ -607,8 +603,6 @@ function initBasketPage() {
         });
 
         const totals = basketTotals(items);
-        basketHeroCount.textContent = String(totals.itemCount);
-        basketHeroSubtotal.textContent = formatGBP(totals.subtotal);
         itemCountNode.textContent = String(totals.itemCount);
         subtotalNode.textContent = formatGBP(totals.subtotal);
         totalNode.textContent = formatGBP(totals.subtotal);

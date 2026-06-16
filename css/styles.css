@@ -803,6 +803,10 @@ body.menu-open {
     padding-bottom: 5rem;
 }
 
+.basket-page .basket-content-section {
+    padding-top: 1.5rem;
+}
+
 .product-hero,
 .basket-hero {
     padding: 1.5rem 0 0.5rem;
