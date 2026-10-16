@@ -19,10 +19,7 @@ A modern, responsive website for The Plate Shop, specializing in premium UK-lega
 
 ## Online Ordering (Stripe + Netlify)
 
-Customers configure plates on `product.html` (size, front/rear/pair, fixing kit, colours, registration), review them in `basket.html`, choose same-day collection (optional fitting, £9.99 per plate) or tracked delivery (£9.99), then either:
-
-- **Pay now**: goes to Stripe Checkout. Paid orders appear in Stripe Dashboard > Payments; each payment's metadata lists every plate plus the customer's name, phone, address, notes, collection/delivery and fitting.
-- **Pay on confirmation**: the order is saved in Netlify > Forms (`pay-later-order`) so you can contact the customer and take payment.
+Customers configure plates on `product.html` (size, front/rear/pair, fixing kit, colours, registration), review them in `basket.html`, choose same-day collection (optional fitting, £9.99 per plate) or tracked delivery (£9.99), then pay on Stripe Checkout. Paid orders appear in Stripe Dashboard > Payments; each payment's metadata lists every plate plus the customer's name, phone, address, notes, collection/delivery and fitting.
 
 How it fits together:
 
@@ -37,9 +34,8 @@ How it fits together:
    - `STRIPE_SECRET_KEY`: from Stripe Dashboard > Developers > API keys (start with `sk_test_...`)
    - `STRIPE_WEBHOOK_SECRET`: see step 3
 3. In Stripe Dashboard > Developers > Webhooks, add the endpoint `https://<your-site>/api/webhook` with events `checkout.session.completed` and `checkout.session.async_payment_succeeded`. Copy its signing secret into `STRIPE_WEBHOOK_SECRET`, then redeploy.
-4. In Netlify > Forms, enable form detection and redeploy, then add an email notification for `pay-later-order`.
-5. In Stripe > Settings > Customer emails, turn on **Successful payments** so customers get receipts.
-6. Test with card `4242 4242 4242 4242`, then swap to live keys and a live webhook when ready.
+4. In Stripe > Settings > Customer emails, turn on **Successful payments** so customers get receipts.
+5. Test with card `4242 4242 4242 4242`, then swap to live keys and a live webhook when ready.
 
 ### Local development
 
@@ -49,14 +45,14 @@ npx netlify dev
 stripe listen --forward-to localhost:8888/api/webhook
 ```
 
-Copy `.env.example` to `.env` and fill in your test keys. Pay-later form submissions only work on the deployed site.
+Copy `.env.example` to `.env` and fill in your test keys.
 
 ## Technologies Used
 
 - HTML5
 - CSS3 (with CSS Grid and Flexbox)
 - Vanilla JavaScript
-- Stripe Checkout + Netlify Functions (Node.js) and Netlify Forms
+- Stripe Checkout + Netlify Functions (Node.js)
 - Google Fonts (Playfair Display & Inter)
 
 ## Getting Started

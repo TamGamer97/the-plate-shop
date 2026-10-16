@@ -593,10 +593,6 @@ function initBasketPage() {
         return checkoutForm.querySelector('input[name="fulfilment"]:checked')?.value || 'collection';
     }
 
-    function selectedPaymentMethod() {
-        return checkoutForm.querySelector('input[name="paymentMethod"]:checked')?.value || 'pay-now';
-    }
-
     function basketTotals(items) {
         const itemCount = items.reduce((t, i) => t + (Number(i.quantity) || 1), 0);
         const plateCount = items.reduce((t, i) => t + plateCountForItem(i), 0);
@@ -614,7 +610,6 @@ function initBasketPage() {
         addressGroup.querySelectorAll('input').forEach(input => { input.required = isDelivery; });
         fittingGroup.hidden = isDelivery;
         if (isDelivery) fittingInput.checked = false;
-        placeOrderBtn.textContent = selectedPaymentMethod() === 'pay-now' ? 'Pay Securely' : 'Place Order';
         renderTotals();
     }
 
@@ -708,12 +703,7 @@ function initBasketPage() {
         previousItemIds = currentIds;
     }
 
-    function describeBasketItem(item) {
-        const labels = formatBasketOptions(item);
-        return `${item.quantity} x ${item.productName} | ${labels.set} | ${item.plateText} | ${labels.size} | ${labels.fixing} | Lip: ${labels.lip} | Logo: ${labels.logo}`;
-    }
-
-    // Pay now: hand over to Stripe Checkout. The server re-prices everything.
+    // Hand over to Stripe Checkout. The server re-prices everything.
     async function startStripeCheckout(order) {
         const res = await fetch('/api/checkout', {
             method: 'POST',
@@ -725,28 +715,6 @@ function initBasketPage() {
         window.location.href = data.url;
     }
 
-    // Pay on confirmation: saved as a Netlify Forms submission (see the hidden form in basket.html)
-    async function submitPayLaterOrder(order, totals) {
-        const { customer } = order;
-        const body = new URLSearchParams({
-            'form-name': 'pay-later-order',
-            name: customer.fullName,
-            email: customer.email,
-            phone: customer.phone,
-            fulfilment: order.fulfilment,
-            address: order.fulfilment === 'delivery' ? `${customer.address}, ${customer.postcode}` : '',
-            fitting: order.fitting ? `Yes (${totals.plateCount} plates)` : 'No',
-            items: order.items.map(describeBasketItem).join('\n'),
-            total: formatGBP(totals.total),
-            notes: order.notes
-        });
-        const res = await fetch('/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: body.toString()
-        });
-        if (!res.ok) throw new Error('Could not send your order. Please try again or message us on WhatsApp.');
-    }
 
     basketNode.addEventListener('click', event => {
         const removeBtn = event.target.closest('[data-remove-id]');
@@ -776,7 +744,7 @@ function initBasketPage() {
     });
 
     checkoutForm.addEventListener('change', event => {
-        if (['fulfilment', 'paymentMethod', 'fitting'].includes(event.target.name)) syncFulfilment();
+        if (['fulfilment', 'fitting'].includes(event.target.name)) syncFulfilment();
     });
 
     checkoutForm.addEventListener('submit', async event => {
@@ -820,27 +788,17 @@ function initBasketPage() {
             notes: document.getElementById('checkoutNotes').value.trim(),
             items: basket
         };
-        const paymentMethod = selectedPaymentMethod();
         const buttonLabel = placeOrderBtn.textContent;
         placeOrderBtn.disabled = true;
-        placeOrderBtn.textContent = paymentMethod === 'pay-now' ? 'Redirecting…' : 'Sending…';
+        placeOrderBtn.textContent = 'Redirecting…';
 
         try {
-            if (paymentMethod === 'pay-now') {
-                await startStripeCheckout(order);
-                return;
-            }
-            await submitPayLaterOrder(order, basketTotals(basket));
-            showBasketFeedback(successBox, `Thanks ${customer.fullName.split(' ')[0]}, your order has been sent. We'll be in touch shortly to confirm and take payment.`, 'success');
-            setBasket([]);
-            checkoutForm.reset();
-            renderBasket({ animateEnter: false });
-            refreshCartUI();
+            await startStripeCheckout(order);
         } catch (error) {
             showBasketFeedback(successBox, error.message, 'error');
+            placeOrderBtn.textContent = buttonLabel;
+            placeOrderBtn.disabled = !getBasket().length;
         }
-        placeOrderBtn.textContent = buttonLabel;
-        placeOrderBtn.disabled = !getBasket().length;
     });
 
     renderBasket({ animateEnter: false });

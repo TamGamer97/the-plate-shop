@@ -128,24 +128,8 @@
                         </div>
 
                         <div class="payment-step">
-                            <h3 class="order-subtitle">Payment Method</h3>
-                            <fieldset class="option-set">
-                                <legend class="visually-hidden">Select payment preference</legend>
-                                <label class="option-row">
-                                    <input type="radio" name="paymentMethod" value="pay-now" checked>
-                                    <span class="option-row-content">
-                                        <span class="option-row-title">Pay now</span>
-                                        <span class="option-row-meta">Pay securely online by card, Apple Pay or Google Pay (via Stripe)</span>
-                                    </span>
-                                </label>
-                                <label class="option-row">
-                                    <input type="radio" name="paymentMethod" value="pay-later">
-                                    <span class="option-row-content">
-                                        <span class="option-row-title">Pay on confirmation</span>
-                                        <span class="option-row-meta">We'll contact you to complete payment</span>
-                                    </span>
-                                </label>
-                            </fieldset>
+                            <h3 class="order-subtitle">Payment</h3>
+                            <p class="checkout-section-intro">You'll pay securely online by card, Apple Pay or Google Pay on the next page (powered by Stripe).</p>
                         </div>
                     </form>
 
@@ -199,19 +183,6 @@
         </svg>
     </a>
 
-    <!-- Netlify Forms: "Pay on confirmation" orders are submitted to this form by js/script.js -->
-    <form name="pay-later-order" data-netlify="true" netlify-honeypot="bot-field" hidden>
-        <input name="bot-field">
-        <input name="name">
-        <input name="email">
-        <input name="phone">
-        <input name="fulfilment">
-        <input name="address">
-        <input name="fitting">
-        <textarea name="items"></textarea>
-        <input name="total">
-        <textarea name="notes"></textarea>
-    </form>
 
     <script src="js/script.js"></script>
 </body>
