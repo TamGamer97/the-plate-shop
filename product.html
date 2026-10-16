@@ -87,25 +87,32 @@
                             </div>
 
                             <div class="form-group hidden-field" id="productCustomSizeGroup">
-                                <label for="productCustomSize">Custom Size (CM)</label>
+                                <label for="productCustomSize">Custom Size (CM) <span class="label-optional">(+£10.00 per plate)</span></label>
                                 <input id="productCustomSize" name="customSize" type="text" placeholder="e.g. 52 x 11">
                             </div>
 
                             <fieldset class="form-group option-set quantity-option-set">
                                 <legend>How many plates do you need?</legend>
-                                <div class="quantity-cards" role="radiogroup" aria-label="Plate quantity choice">
+                                <div class="quantity-cards quantity-cards--three" role="radiogroup" aria-label="Plate quantity choice">
                                     <label class="quantity-card is-selected">
-                                        <input type="radio" name="quantityType" value="rear-only" checked>
+                                        <input type="radio" name="quantityType" value="front-back" checked>
                                         <span class="quantity-card-content">
-                                            <span class="quantity-card-title">Rear Plate</span>
-                                            <span class="quantity-card-meta">1 plate</span>
+                                            <span class="quantity-card-title">Front + Rear</span>
+                                            <span class="quantity-card-meta">2 plates · <span data-quantity-price="front-back"></span></span>
                                         </span>
                                     </label>
                                     <label class="quantity-card">
-                                        <input type="radio" name="quantityType" value="front-back">
+                                        <input type="radio" name="quantityType" value="front-only">
                                         <span class="quantity-card-content">
-                                            <span class="quantity-card-title">Front + Rear</span>
-                                            <span class="quantity-card-meta">2 plates</span>
+                                            <span class="quantity-card-title">Front Plate</span>
+                                            <span class="quantity-card-meta">1 plate · <span data-quantity-price="front-only"></span></span>
+                                        </span>
+                                    </label>
+                                    <label class="quantity-card">
+                                        <input type="radio" name="quantityType" value="rear-only">
+                                        <span class="quantity-card-content">
+                                            <span class="quantity-card-title">Rear Plate</span>
+                                            <span class="quantity-card-meta">1 plate · <span data-quantity-price="rear-only"></span></span>
                                         </span>
                                     </label>
                                 </div>
@@ -143,14 +150,14 @@
 
                             <div class="form-group">
                                 <label for="productPlateText">Registration Text</label>
-                                <input id="productPlateText" name="plateText" type="text" required placeholder="AB12 CDE">
+                                <input id="productPlateText" name="plateText" type="text" required maxlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="AB12 CDE">
                             </div>
                         </div>
 
                         <aside class="order-summary" aria-live="polite">
                             <h2 class="order-card-title">Order Summary</h2>
                             <div class="summary-line summary-line--detail">
-                                <span>Base Price</span>
+                                <span>Plates</span>
                                 <strong id="productSummaryBase">£0.00</strong>
                             </div>
                             <div class="summary-line summary-line--detail">

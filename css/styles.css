@@ -3192,3 +3192,94 @@ html {
     }
 }
 
+
+/* Prices on plate cards */
+.plate-price {
+    font-weight: 700;
+    color: var(--primary-black);
+    margin: 0.25rem 0 0.75rem;
+}
+
+/* Product page: three plate quantity options */
+.quantity-cards.quantity-cards--three,
+.product-page .quantity-cards.quantity-cards--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Basket: collection / delivery */
+.checkout-fitting {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.9rem 1rem;
+    border: 1px dashed rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.checkout-fitting[hidden] {
+    display: none;
+}
+
+.checkout-fitting input {
+    margin-top: 0.25rem;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-black);
+    flex-shrink: 0;
+}
+
+.checkout-footnote {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    margin-top: 0.6rem;
+}
+
+#checkoutAddressGroup {
+    margin-top: 1.5rem;
+}
+
+.summary-line[hidden] {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .quantity-cards.quantity-cards--three,
+    .product-page .quantity-cards.quantity-cards--three {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Success page */
+.success-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--dark-bg);
+    color: var(--primary-white);
+    padding: 2rem 16px;
+    text-align: center;
+}
+
+.success-page img {
+    max-width: 140px;
+    margin-bottom: 1.5rem;
+}
+
+.success-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-gold);
+}
+
+.success-page p {
+    max-width: 520px;
+    margin: 0 auto 1rem;
+}
+
+.success-page .btn {
+    margin-top: 1rem;
+}
+

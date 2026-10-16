@@ -1,0 +1,14 @@
+{
+  "name": "the-plate-shop",
+  "private": true,
+  "description": "The Plate Shop website with Stripe Checkout (Netlify Functions)",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "stripe": "^23.0.0"
+  }
+}

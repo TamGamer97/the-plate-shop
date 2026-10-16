@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Order Confirmed - The Plate Shop</title>
+    <link rel="icon" type="image/png" href="images/New-logo-transparent.png">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="success-page">
+        <div>
+            <img src="images/New-logo-transparent.png" alt="The Plate Shop Logo">
+            <h1 id="success-title">Thank you for your order!</h1>
+            <p id="success-message">Your payment was successful and a receipt has been sent to your email.</p>
+            <p id="success-next"></p>
+            <a href="index.html" class="btn btn-primary">BACK TO THE PLATE SHOP</a>
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            // The order is complete, so empty the basket
+            try { localStorage.removeItem('plate_shop_basket_v1'); } catch (e) { /* ignore */ }
+
+            var id = new URLSearchParams(window.location.search).get('session_id');
+            if (!id) return;
+
+            fetch('/api/session?id=' + encodeURIComponent(id))
+                .then(function (res) { return res.ok ? res.json() : null; })
+                .then(function (order) {
+                    if (!order) return;
+                    if (order.name) {
+                        document.getElementById('success-title').textContent = 'Thank you, ' + order.name.split(' ')[0] + '!';
+                    }
+                    if (order.total != null) {
+                        document.getElementById('success-message').textContent =
+                            'Your payment of £' + (order.total / 100).toFixed(2) + ' was successful and a receipt has been sent to your email.';
+                    }
+                    document.getElementById('success-next').textContent = order.fulfilment === 'delivery'
+                        ? 'Your plates will be made and sent by tracked delivery within 2–3 days.'
+                        : 'We will send you a text as soon as your plates are ready for collection.';
+                })
+                .catch(function () { /* keep the generic message */ });
+        })();
+    </script>
+</body>
+</html>
