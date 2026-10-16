@@ -429,16 +429,9 @@ function initScrollSpy() {
     window.addEventListener('scroll', updateActiveLink, { passive: true });
 }
 
-function initIndexPage() {
-    const page = document.querySelector('#plates');
-    if (!page) return;
-    document.querySelectorAll('.plate-card').forEach(card => {
-        const link = card.querySelector('.plate-order-link');
-        if (!link) return;
-        card.addEventListener('click', event => {
-            if (event.target.closest('.plate-order-link')) return;
-            window.location.href = link.href;
-        });
+function initFooterYear() {
+    document.querySelectorAll('[data-year]').forEach(node => {
+        node.textContent = String(new Date().getFullYear());
     });
 }
 
@@ -805,14 +798,14 @@ function initBasketPage() {
 }
 
 function initIndexPrices() {
-    document.querySelectorAll('.plate-card .plate-order-link').forEach(link => {
-        const slug = new URL(link.href, window.location.href).searchParams.get('product');
-        const plate = PRICES.plates[slug];
+    document.querySelectorAll('[data-price-for]').forEach(node => {
+        const plate = PRICES.plates[node.dataset.priceFor];
         if (!plate) return;
-        const price = document.createElement('p');
-        price.className = 'plate-price';
-        price.textContent = `From ${formatGBP(plate.single / 100)} · Pair ${formatGBP(plate.pair / 100)}`;
-        link.before(price);
+        node.innerHTML = `
+            <span class="plate-price-label">From</span>
+            <span class="plate-price-main">${formatGBP(plate.single / 100)}</span>
+            <span class="plate-price-pair">${formatGBP(plate.pair / 100)} a pair</span>
+        `;
     });
 }
 
@@ -826,7 +819,7 @@ function showPriceLoadError() {
 document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     refreshCartUI();
-    initIndexPage();
+    initFooterYear();
     loadPrices()
         .then(() => {
             repriceBasket();

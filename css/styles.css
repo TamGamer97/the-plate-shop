@@ -427,7 +427,7 @@ body.menu-open {
     line-height: 1.8;
     opacity: 0.95;
     font-family: Clarkson, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    max-width: 800px;
+    max-width: 560px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -521,44 +521,52 @@ body.menu-open {
 
 .section-subtitle {
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-gray);
-    margin-bottom: 3rem;
-    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
 }
 
 .plates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2.5rem;
-    margin-top: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
 }
 
-@media (min-width: 1200px) {
+/* 9 plate styles: 3 x 3 on larger screens */
+@media (min-width: 900px) {
     .plates-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
-@media (min-width: 769px) and (max-width: 1199px) {
+@media (min-width: 600px) and (max-width: 899px) {
     .plates-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 .plate-card {
+    display: flex;
+    flex-direction: column;
     background-color: var(--primary-white);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.plate-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+.plate-card:hover,
+.plate-card:focus-visible {
+    border-color: var(--primary-black);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.plate-card:focus-visible {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
 }
 
 .plate-image {
@@ -577,6 +585,11 @@ body.menu-open {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.plate-card:hover .plate-image img {
+    transform: scale(1.04);
 }
 
 .plate-placeholder {
@@ -739,40 +752,96 @@ body.menu-open {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+.plate-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.25rem 1.25rem 1.1rem;
+}
+
 .plate-title {
-    font-size: 1.1rem;
-    padding: 1.8rem 1.8rem 0.8rem;
+    font-size: 1.05rem;
+    margin-bottom: 0.4rem;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     color: var(--primary-black);
     font-weight: 700;
-    font-family: 'Playfair Display', serif;
+    font-family: Clarkson, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .plate-description {
-    padding: 0 1.8rem 1.8rem;
     color: var(--text-gray);
-    line-height: 1.7;
-    font-size: 0.95rem;
+    line-height: 1.55;
+    font-size: 0.9rem;
+    margin-bottom: 1.1rem;
 }
 
-.plate-order-link {
-    display: inline-block;
-    margin: 0 1.8rem 1.6rem;
-    text-decoration: none;
-    color: var(--primary-black);
+.plate-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.plate-price {
+    display: grid;
+    min-height: 3.1rem;
+    line-height: 1.2;
+}
+
+.plate-price-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-gray);
+}
+
+.plate-price-main {
+    font-size: 1.35rem;
     font-weight: 700;
-    border: 1px solid var(--primary-black);
+    color: var(--primary-black);
+    font-variant-numeric: tabular-nums;
+}
+
+.plate-price-pair {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+}
+
+.plate-cta {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     padding: 0.55rem 0.9rem;
     border-radius: 6px;
-    transition: all 0.2s ease;
-    font-size: 0.8rem;
-    letter-spacing: 0.7px;
+    background-color: var(--primary-black);
+    color: var(--primary-white);
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.plate-order-link:hover {
-    background-color: var(--primary-black);
-    color: var(--primary-gold);
+.plate-card:hover .plate-cta {
+    background-color: var(--primary-gold);
+    color: var(--primary-black);
+}
+
+.plates-note {
+    text-align: center;
+    margin-top: 2.5rem;
+    color: var(--text-gray);
+}
+
+.plates-note a {
+    color: var(--primary-black);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--primary-gold);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
 }
 
 .cart-count {
@@ -2051,24 +2120,18 @@ body.menu-open {
     color: var(--primary-white);
 }
 
-.highlights h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: var(--primary-gold);
-}
-
-.highlights ul {
+.about-list {
     list-style: none;
     margin-bottom: 2rem;
 }
 
-.highlights li {
-    padding: 0.5rem 0;
+.about-list li {
+    padding: 0.45rem 0;
     padding-left: 1.5rem;
     position: relative;
 }
 
-.highlights li::before {
+.about-list li::before {
     content: "✓";
     position: absolute;
     left: 0;
@@ -2076,10 +2139,18 @@ body.menu-open {
     font-weight: bold;
 }
 
+.about-image img,
+.trust-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .about-image {
     width: 100%;
     height: 500px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--dark-bg);
     border-radius: 8px;
     overflow: hidden;
     position: relative;
@@ -2117,7 +2188,7 @@ body.menu-open {
 .trust-image {
     width: 100%;
     height: 500px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: var(--light-gray);
     border-radius: 8px;
     overflow: hidden;
     position: relative;
@@ -2136,36 +2207,39 @@ body.menu-open {
     color: var(--primary-black);
 }
 
-.features h3,
-.optional-features h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: var(--primary-black);
-    margin-top: 2rem;
+.trust-intro {
+    color: var(--text-gray);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
 }
 
-.features ul,
-.optional-features ul {
-    list-style: none;
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
     margin-bottom: 2rem;
 }
 
-.features li,
-.optional-features li {
-    padding: 0.5rem 0;
-    padding-left: 1.5rem;
-    position: relative;
-    color: var(--text-gray);
+.service-item {
+    padding: 1.1rem 1.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-left: 3px solid var(--primary-gold);
+    border-radius: 8px;
 }
 
-.features li::before,
-.optional-features li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: var(--primary-gold);
-    font-weight: bold;
-    font-size: 1.5rem;
+.service-item h3 {
+    font-family: Clarkson, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 0.35rem;
+    color: var(--primary-black);
+}
+
+.service-item p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-gray);
 }
 
 /* Testimonials Section */
@@ -3193,13 +3267,6 @@ html {
 }
 
 
-/* Prices on plate cards */
-.plate-price {
-    font-weight: 700;
-    color: var(--primary-black);
-    margin: 0.25rem 0 0.75rem;
-}
-
 /* Product page: three plate quantity options */
 .quantity-cards.quantity-cards--three,
 .product-page .quantity-cards.quantity-cards--three {
@@ -3283,3 +3350,15 @@ html {
     margin-top: 1rem;
 }
 
+
+/* Footer */
+.footer-logo {
+    max-width: 150px;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+}
