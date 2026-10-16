@@ -46,12 +46,12 @@ export default async (req) => {
         });
     }
 
-    if (order.fulfilment === 'delivery') {
+    if (order.fulfilment === 'delivery' && order.deliveryAmount > 0) {
         lineItems.push({
             quantity: 1,
             price_data: {
                 currency: catalog.currency,
-                unit_amount: catalog.delivery.price,
+                unit_amount: order.deliveryAmount,
                 product_data: {
                     name: 'Tracked delivery',
                     description: `${catalog.delivery.minDays}-${catalog.delivery.maxDays} days`,
@@ -68,7 +68,12 @@ export default async (req) => {
         name: customer.fullName,
         phone: customer.phone,
     };
-    if (order.fulfilment === 'delivery') metadata.address = `${customer.address}, ${customer.postcode}`;
+    if (order.fulfilment === 'delivery') {
+        metadata.address = `${customer.address}, ${customer.postcode}`;
+        metadata.delivery = order.deliveryAmount
+            ? `£${(order.deliveryAmount / 100).toFixed(2)}`
+            : `free (${catalog.delivery.freeAreaName})`;
+    }
     if (order.notes) metadata.notes = order.notes;
     order.items.forEach((item, i) => {
         metadata[`item_${i + 1}`] = describeItem(item).slice(0, 500);
@@ -87,7 +92,7 @@ export default async (req) => {
 
     if (order.fulfilment === 'collection') {
         params.custom_text = {
-            submit: { message: 'Same-day collection. You will receive a text when your plates are ready to collect.' },
+            submit: { message: 'Free click & collect. Same-day collection available. We will text you when your plates are ready.' },
         };
     }
 

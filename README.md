@@ -19,7 +19,7 @@ A modern, responsive website for The Plate Shop, specializing in premium UK-lega
 
 ## Online Ordering (Stripe + Netlify)
 
-Customers configure plates on `product.html` (size, front/rear/pair, fixing kit, colours, registration), review them in `basket.html`, choose same-day collection (optional fitting, £9.99 per plate) or tracked delivery (£9.99), then pay on Stripe Checkout. Paid orders appear in Stripe Dashboard > Payments; each payment's metadata lists every plate plus the customer's name, phone, address, notes, collection/delivery and fitting.
+Customers configure plates on `product.html` (size, front/rear/pair, fixing kit, colours, registration), review them in `basket.html`, choose free click & collect (same-day available, optional fitting at £9.99 per plate) or tracked delivery (free in Oldham postcodes, £9.99 elsewhere; the free districts are listed in `data/catalog.json`), then pay on Stripe Checkout. Paid orders appear in Stripe Dashboard > Payments; each payment's metadata lists every plate plus the customer's name, phone, address, notes, collection/delivery and fitting.
 
 How it fits together:
 

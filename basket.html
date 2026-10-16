@@ -86,20 +86,20 @@
                             </div>
                         </div>
                         <div class="payment-step">
-                            <h3 class="order-subtitle">Collection or Delivery</h3>
+                            <h3 class="order-subtitle">Click &amp; Collect or Delivery</h3>
                             <fieldset class="option-set">
-                                <legend class="visually-hidden">Choose collection or delivery</legend>
+                                <legend class="visually-hidden">Choose click and collect or delivery</legend>
                                 <label class="option-row">
                                     <input type="radio" name="fulfilment" value="collection" checked>
                                     <span class="option-row-content">
-                                        <span class="option-row-title">Collection (Free)</span>
-                                        <span class="option-row-meta">Same day. You will receive a text when your plates are ready for collection.*</span>
+                                        <span class="option-row-title">Click &amp; Collect (Free)</span>
+                                        <span class="option-row-meta">Same-day collection available. We'll text you when your plates are ready.*</span>
                                     </span>
                                 </label>
                                 <label class="option-row">
                                     <input type="radio" name="fulfilment" value="delivery">
                                     <span class="option-row-content">
-                                        <span class="option-row-title">Delivery (£9.99)</span>
+                                        <span class="option-row-title">Delivery (Free in Oldham, £9.99 elsewhere)</span>
                                         <span class="option-row-meta">Tracked delivery in 2–3 days</span>
                                     </span>
                                 </label>
@@ -108,7 +108,7 @@
                                 <input type="checkbox" id="checkoutFitting" name="fitting">
                                 <span>Add fitting at collection <strong>(£9.99 per plate)</strong></span>
                             </label>
-                            <p class="checkout-footnote">*Same-day collection where applicable.</p>
+                            <p class="checkout-footnote">*Same-day collection where applicable. Free delivery covers OL1–OL4, OL8, OL9 and M35.</p>
                         </div>
                         <div id="checkoutAddressGroup" hidden>
                             <div class="form-row">
@@ -118,7 +118,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="checkoutPostcode">Postcode</label>
-                                    <input id="checkoutPostcode" name="postcode" type="text" autocomplete="postal-code" placeholder="Postcode">
+                                    <input id="checkoutPostcode" name="postcode" type="text" autocomplete="postal-code" autocapitalize="characters" placeholder="e.g. OL1 1AA">
+                                    <p class="postcode-hint" id="checkoutPostcodeHint" aria-live="polite"></p>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +149,7 @@
                             <strong id="basketFittingTotal">£0.00</strong>
                         </div>
                         <div class="summary-line">
-                            <span id="basketDeliveryLabel">Collection</span>
+                            <span id="basketDeliveryLabel">Click &amp; Collect</span>
                             <strong id="basketDeliveryTotal">Free</strong>
                         </div>
                         <div class="summary-total">

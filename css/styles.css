@@ -3458,3 +3458,10 @@ html {
         font-size: 1.8rem;
     }
 }
+
+.postcode-hint {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-top: 0.35rem;
+    min-height: 1.2em;
+}

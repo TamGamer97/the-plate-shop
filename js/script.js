@@ -252,6 +252,18 @@ function repriceBasket() {
     setBasket(basket);
 }
 
+// Mirrors normalisePostcode() / deliveryPrice() in netlify/lib/order.mjs
+function normalisePostcode(value) {
+    const compact = String(value || '').toUpperCase().replace(/\s+/g, '');
+    if (!/^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/.test(compact)) return '';
+    return `${compact.slice(0, -3)} ${compact.slice(-3)}`;
+}
+
+function deliveryPriceFor(postcode) {
+    const district = postcode.split(' ')[0];
+    return PRICES.delivery.freePostcodeDistricts.includes(district) ? 0 : PRICES.delivery.price;
+}
+
 function normaliseRegistration(value) {
     return String(value || '').toUpperCase().replace(/\s+/g, ' ').trim();
 }
@@ -580,6 +592,8 @@ function initBasketPage() {
     const fittingTotalNode = document.getElementById('basketFittingTotal');
     const deliveryLabelNode = document.getElementById('basketDeliveryLabel');
     const deliveryTotalNode = document.getElementById('basketDeliveryTotal');
+    const postcodeInput = document.getElementById('checkoutPostcode');
+    const postcodeHint = document.getElementById('checkoutPostcodeHint');
     let previousItemIds = new Set();
 
     function selectedFulfilment() {
@@ -592,8 +606,12 @@ function initBasketPage() {
         const subtotal = items.reduce((t, i) => t + ((Number(i.quantity) || 1) * Number(i.unitPrice || 0)), 0);
         const isDelivery = selectedFulfilment() === 'delivery';
         const fitting = !isDelivery && fittingInput.checked ? plateCount * PRICES.fittingPerPlate / 100 : 0;
-        const delivery = isDelivery && items.length ? PRICES.delivery.price / 100 : 0;
-        return { itemCount, plateCount, subtotal, fitting, delivery, total: subtotal + fitting + delivery };
+        const postcode = normalisePostcode(postcodeInput.value);
+        // Until a valid postcode is entered, assume the standard delivery charge
+        const delivery = isDelivery && items.length
+            ? (postcode ? deliveryPriceFor(postcode) : PRICES.delivery.price) / 100
+            : 0;
+        return { itemCount, plateCount, subtotal, fitting, delivery, postcode, total: subtotal + fitting + delivery };
     }
 
     // Show only the fields that apply to collection or delivery, then refresh the totals
@@ -613,8 +631,20 @@ function initBasketPage() {
         fittingLine.hidden = !totals.fitting;
         fittingTotalNode.textContent = `${formatGBP(totals.fitting)}`;
         const isDelivery = selectedFulfilment() === 'delivery';
-        deliveryLabelNode.textContent = isDelivery ? 'Delivery (2–3 days)' : 'Collection';
-        deliveryTotalNode.textContent = isDelivery ? formatGBP(totals.delivery) : 'Free';
+        const freeDelivery = isDelivery && totals.postcode && totals.delivery === 0;
+        deliveryLabelNode.textContent = isDelivery
+            ? (freeDelivery ? `Delivery (${PRICES.delivery.freeAreaName})` : 'Delivery (2–3 days)')
+            : 'Click & Collect';
+        deliveryTotalNode.textContent = isDelivery && totals.delivery ? formatGBP(totals.delivery) : 'Free';
+        if (!isDelivery || !postcodeInput.value.trim()) {
+            postcodeHint.textContent = '';
+        } else if (!totals.postcode) {
+            postcodeHint.textContent = 'Enter a full UK postcode to check delivery.';
+        } else {
+            postcodeHint.textContent = freeDelivery
+                ? `Free delivery to ${totals.postcode}.`
+                : `Delivery to ${totals.postcode} is ${formatGBP(PRICES.delivery.price / 100)}.`;
+        }
         totalNode.textContent = formatGBP(totals.total);
         return totals;
     }
@@ -736,6 +766,8 @@ function initBasketPage() {
         refreshCartUI();
     });
 
+    postcodeInput.addEventListener('input', renderTotals);
+
     checkoutForm.addEventListener('change', event => {
         if (['fulfilment', 'fitting'].includes(event.target.name)) syncFulfilment();
     });
@@ -769,8 +801,12 @@ function initBasketPage() {
             showBasketFeedback(successBox, 'Please enter your phone number so we can text you about your order.', 'error');
             return;
         }
-        if (fulfilment === 'delivery' && (!customer.address || !customer.postcode)) {
-            showBasketFeedback(successBox, 'Please enter your delivery address and postcode.', 'error');
+        if (fulfilment === 'delivery' && !customer.address) {
+            showBasketFeedback(successBox, 'Please enter your delivery address.', 'error');
+            return;
+        }
+        if (fulfilment === 'delivery' && !normalisePostcode(customer.postcode)) {
+            showBasketFeedback(successBox, 'Please enter a valid UK postcode.', 'error');
             return;
         }
 

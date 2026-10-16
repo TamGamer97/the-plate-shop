@@ -7,8 +7,22 @@ const MAX_QTY = 10;
 const REG_PATTERN = /^[A-Z0-9 ]{1,10}$/;
 const PHONE_PATTERN = /^[0-9 +()-]{7,20}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const UK_POSTCODE_PATTERN = /^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/;
 
 export class OrderError extends Error {}
+
+// "ol1 2ab" -> "OL1 2AB", or '' if it isn't a UK postcode
+export function normalisePostcode(value) {
+    const compact = String(value ?? '').toUpperCase().replace(/\s+/g, '');
+    if (!UK_POSTCODE_PATTERN.test(compact)) return '';
+    return `${compact.slice(0, -3)} ${compact.slice(-3)}`;
+}
+
+// Delivery is free inside the postcode districts listed in data/catalog.json
+export function deliveryPrice(postcode) {
+    const district = postcode.split(' ')[0];
+    return catalog.delivery.freePostcodeDistricts.includes(district) ? 0 : catalog.delivery.price;
+}
 
 function clean(value, max) {
     return String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, max);
@@ -62,7 +76,7 @@ function validateItem(item) {
     };
 }
 
-// Returns a validated order: { items, fulfilment, fitting, plateCount, customer, notes }
+// Returns a validated order: { items, fulfilment, deliveryAmount, fitting, plateCount, customer, notes }
 export function validateOrder(body) {
     if (!body || typeof body !== 'object') throw new OrderError('Invalid request.');
 
@@ -82,13 +96,16 @@ export function validateOrder(body) {
         email: clean(c.email, 200),
         phone: clean(c.phone, 20),
         address: fulfilment === 'delivery' ? clean(c.address, 200) : '',
-        postcode: fulfilment === 'delivery' ? clean(c.postcode, 10).toUpperCase() : '',
+        postcode: fulfilment === 'delivery' ? normalisePostcode(c.postcode) : '',
     };
     if (!customer.fullName) throw new OrderError('Please enter your full name.');
     if (!EMAIL_PATTERN.test(customer.email)) throw new OrderError('Please enter a valid email address.');
     if (!PHONE_PATTERN.test(customer.phone)) throw new OrderError('Please enter a valid phone number.');
-    if (fulfilment === 'delivery' && (!customer.address || !customer.postcode)) {
-        throw new OrderError('Please enter your delivery address and postcode.');
+    if (fulfilment === 'delivery' && !customer.address) {
+        throw new OrderError('Please enter your delivery address.');
+    }
+    if (fulfilment === 'delivery' && !customer.postcode) {
+        throw new OrderError('Please enter a valid UK postcode.');
     }
 
     const validated = items.map(validateItem);
@@ -96,6 +113,7 @@ export function validateOrder(body) {
     return {
         items: validated,
         fulfilment,
+        deliveryAmount: fulfilment === 'delivery' ? deliveryPrice(customer.postcode) : 0,
         fitting: Boolean(fitting),
         plateCount,
         customer,

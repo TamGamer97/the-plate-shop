@@ -42,5 +42,11 @@
     "gold": "Gold"
   },
   "fittingPerPlate": 999,
-  "delivery": { "price": 999, "minDays": 2, "maxDays": 3 }
+  "delivery": {
+    "price": 999,
+    "minDays": 2,
+    "maxDays": 3,
+    "freeAreaName": "Oldham",
+    "freePostcodeDistricts": ["OL1", "OL2", "OL3", "OL4", "OL8", "OL9", "M35"]
+  }
 }

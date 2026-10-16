@@ -36,6 +36,7 @@ export default async (req) => {
                 fulfilment: meta.fulfilment,
                 fitting: meta.fitting,
                 address: meta.address || null,
+                delivery: meta.delivery || null,
                 notes: meta.notes || null,
                 total: (session.amount_total / 100).toFixed(2),
                 items,
