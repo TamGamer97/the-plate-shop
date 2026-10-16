@@ -72,7 +72,7 @@ export default async (req) => {
         metadata.address = `${customer.address}, ${customer.postcode}`;
         metadata.delivery = order.deliveryAmount
             ? `£${(order.deliveryAmount / 100).toFixed(2)}`
-            : `free (${catalog.delivery.freeAreaName})`;
+            : `free (${catalog.delivery.freeAreaName}, same/next day)`;
     }
     if (order.notes) metadata.notes = order.notes;
     order.items.forEach((item, i) => {

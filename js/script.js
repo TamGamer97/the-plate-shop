@@ -633,7 +633,7 @@ function initBasketPage() {
         const isDelivery = selectedFulfilment() === 'delivery';
         const freeDelivery = isDelivery && totals.postcode && totals.delivery === 0;
         deliveryLabelNode.textContent = isDelivery
-            ? (freeDelivery ? `Delivery (${PRICES.delivery.freeAreaName})` : 'Delivery (2–3 days)')
+            ? (freeDelivery ? `Delivery (${PRICES.delivery.freeAreaName}, same/next day)` : 'Delivery (2–3 days)')
             : 'Click & Collect';
         deliveryTotalNode.textContent = isDelivery && totals.delivery ? formatGBP(totals.delivery) : 'Free';
         if (!isDelivery || !postcodeInput.value.trim()) {
@@ -642,8 +642,8 @@ function initBasketPage() {
             postcodeHint.textContent = 'Enter a full UK postcode to check delivery.';
         } else {
             postcodeHint.textContent = freeDelivery
-                ? `Free delivery to ${totals.postcode}.`
-                : `Delivery to ${totals.postcode} is ${formatGBP(PRICES.delivery.price / 100)}.`;
+                ? `Free same-day or next-day delivery to ${totals.postcode}.`
+                : `Delivery to ${totals.postcode} is ${formatGBP(PRICES.delivery.price / 100)} and takes 2–3 days.`;
         }
         totalNode.textContent = formatGBP(totals.total);
         return totals;
