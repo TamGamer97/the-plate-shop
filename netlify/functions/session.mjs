@@ -14,6 +14,7 @@ export default async (req) => {
             name: session.metadata?.name || session.customer_details?.name || null,
             total: session.amount_total,
             fulfilment: session.metadata?.fulfilment || null,
+            freeLocalDelivery: Boolean(session.metadata?.delivery?.startsWith('free')),
         });
     } catch (err) {
         return Response.json({ error: 'Order not found' }, { status: 404 });

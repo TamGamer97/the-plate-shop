@@ -39,9 +39,13 @@
                         document.getElementById('success-message').textContent =
                             'Your payment of £' + (order.total / 100).toFixed(2) + ' was successful and a receipt has been sent to your email.';
                     }
-                    document.getElementById('success-next').textContent = order.fulfilment === 'delivery'
-                        ? 'Your plates will be made and sent by tracked delivery within 2–3 days.'
-                        : 'We will send you a text as soon as your plates are ready for collection.';
+                    var next = 'We will send you a text as soon as your plates are ready for collection.';
+                    if (order.fulfilment === 'delivery') {
+                        next = order.freeLocalDelivery
+                            ? 'Your plates will be delivered the same day or next day. We will text you when they are on the way.'
+                            : 'Your plates will be made and sent by tracked delivery within 2–3 days.';
+                    }
+                    document.getElementById('success-next').textContent = next;
                 })
                 .catch(function () { /* keep the generic message */ });
         })();
