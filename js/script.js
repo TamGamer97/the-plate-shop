@@ -33,6 +33,12 @@ const PRODUCT_CATALOG = {
     retro: { name: 'Retro (Bevelled Effect) Plates', image: 'images/retro plates.jpeg', description: 'Retro bevel style with a premium old-school edge.', features: ['Bevelled look', 'Premium styling', 'Sold as a pair'] }
 };
 
+function escapeHTML(value) {
+    const div = document.createElement('div');
+    div.textContent = String(value ?? '');
+    return div.innerHTML;
+}
+
 function formatGBP(value) {
     return `£${Number(value || 0).toFixed(2)}`;
 }
@@ -53,6 +59,14 @@ const BASKET_LABELS = {
     border: {
         none: 'No border',
         border: 'Border (+£2.00 per plate)'
+    },
+    plateType: {
+        legal: 'Legal plate',
+        show: 'Show plate'
+    },
+    tint: {
+        none: 'No tint',
+        tinted: 'Tinted (+£10.00)'
     },
     fixingKit: {
         sticky: 'Sticky Pads (Free)',
@@ -89,6 +103,8 @@ function formatBasketOptions(item) {
         size: sizeLabel,
         shape: formatBasketLabel('plateShape', opts.plateShape || 'standard'),
         border: formatBasketLabel('border', opts.border || 'none'),
+        plateType: formatBasketLabel('plateType', opts.plateType || 'legal'),
+        tint: formatBasketLabel('tint', opts.tint || 'none'),
         set: formatBasketLabel('quantityType', opts.quantityType),
         fixing: formatBasketLabel('fixingKit', opts.fixingKit),
         lip: formatBasketLabel('colour', opts.lipColour),
@@ -242,6 +258,8 @@ function calculateConfiguredPrice(slug, options) {
     const shapeCost = perPlate('plateShapes', options.plateShape || 'standard');
     const borderCost = perPlate('borders', options.border || 'none');
     const fixingCost = perPlate('fixingKits', options.fixingKit);
+    // Tint is charged once per set (mirrors linePrice() on the server)
+    const tintCost = plate.tintIncluded ? 0 : (PRICES.tints[options.tint || 'none']?.perSet || 0);
     return {
         available: platesCost != null,
         platesCost: platesCost / 100,
@@ -249,8 +267,9 @@ function calculateConfiguredPrice(slug, options) {
         shapeCost: shapeCost / 100,
         borderCost: borderCost / 100,
         fixingCost: fixingCost / 100,
+        tintCost: tintCost / 100,
         plates: qt.plates,
-        total: (platesCost + sizeCost + shapeCost + borderCost + fixingCost) / 100
+        total: (platesCost + sizeCost + shapeCost + borderCost + fixingCost + tintCost) / 100
     };
 }
 
@@ -503,9 +522,11 @@ function initProductPage() {
     });
 
     const sizeInput = document.getElementById('productPlateSize');
-    const fixingInput = document.getElementById('productFixingKit');
     const shapeInput = document.getElementById('productPlateShape');
-    const borderInput = document.getElementById('productBorder');
+    const legalInput = form.querySelector('input[name="plateType"][value="legal"]');
+    const showInput = form.querySelector('input[name="plateType"][value="show"]');
+    const tintGroup = document.getElementById('productTintGroup');
+    const radioValue = (name, fallback) => form.querySelector(`input[name="${name}"]:checked`)?.value || fallback;
     const customSizeGroup = document.getElementById('productCustomSizeGroup');
     const customSizeInput = document.getElementById('productCustomSize');
     const successBox = document.getElementById('productAddSuccess');
@@ -514,6 +535,7 @@ function initProductPage() {
     const summarySize = document.getElementById('productSummarySize');
     const summaryShape = document.getElementById('productSummaryShape');
     const summaryBorder = document.getElementById('productSummaryBorder');
+    const summaryTint = document.getElementById('productSummaryTint');
     const summaryFixing = document.getElementById('productSummaryFixing');
     const summaryQuantity = document.getElementById('productSummaryQuantity');
     const summaryTotal = document.getElementById('productSummaryTotal');
@@ -529,8 +551,10 @@ function initProductPage() {
         return {
             plateSize: sizeInput.value || 'standard',
             plateShape: shapeInput.value || 'standard',
-            border: borderInput.value || 'none',
-            fixingKit: fixingInput.value || 'sticky',
+            border: radioValue('border', 'none'),
+            plateType: radioValue('plateType', 'legal'),
+            tint: plate.tintIncluded ? 'none' : radioValue('tint', 'none'),
+            fixingKit: radioValue('fixingKit', 'sticky'),
             quantityType: form.querySelector('input[name="quantityType"]:checked')?.value || 'rear-only'
         };
     }
@@ -542,6 +566,7 @@ function initProductPage() {
         summarySize.textContent = formatGBP(calc.sizeCost);
         summaryShape.textContent = formatGBP(calc.shapeCost);
         summaryBorder.textContent = formatGBP(calc.borderCost);
+        summaryTint.textContent = formatGBP(calc.tintCost);
         summaryFixing.textContent = formatGBP(calc.fixingCost);
         summaryQuantity.textContent = calc.plates === 1 ? '1 plate' : `${calc.plates} plates`;
         summaryTotal.textContent = formatGBP(calc.total);
@@ -560,9 +585,21 @@ function initProductPage() {
         }
     }
 
+    // Tinted plates (and the Tinted Plates style) are show plates only
+    function syncPlateType() {
+        const showOnly = plate.showOnly || radioValue('tint', 'none') === 'tinted';
+        if (showOnly) showInput.checked = true;
+        legalInput.disabled = showOnly;
+        legalInput.closest('.pill').classList.toggle('is-disabled', showOnly);
+        const isShow = radioValue('plateType', 'legal') === 'show';
+        document.getElementById('productLegalNote').hidden = isShow;
+        document.getElementById('productShowNote').hidden = !isShow;
+    }
+
     form.addEventListener('change', event => {
         if (event.target.name === 'quantityType') syncQuantityCards(form);
         toggleCustomSize();
+        syncPlateType();
         updatePrice();
     });
 
@@ -598,6 +635,7 @@ function initProductPage() {
             options: {
                 ...options,
                 customSize: customSizeInput.value.trim(),
+                request: document.getElementById('productRequest').value.trim(),
                 lipColour: document.getElementById('productLipColour').value,
                 logoColour: document.getElementById('productLogoColour').value
             },
@@ -610,8 +648,10 @@ function initProductPage() {
         scrollProductFeedbackIntoView();
     });
 
+    if (plate.tintIncluded) tintGroup.hidden = true;
     syncQuantityCards(form);
     toggleCustomSize();
+    syncPlateType();
     updatePrice();
 }
 
@@ -743,14 +783,17 @@ function initBasketPage() {
                     <span>Edit configuration</span>
                 </a>
                 <dl class="basket-item-meta">
+                    <div><dt>Type</dt><dd>${labels.plateType}</dd></div>
                     <div><dt>Size</dt><dd>${labels.size}</dd></div>
                     <div><dt>Shape</dt><dd>${labels.shape}</dd></div>
                     <div><dt>Border</dt><dd>${labels.border}</dd></div>
+                    <div><dt>Tint</dt><dd>${labels.tint}</dd></div>
                     <div><dt>Set</dt><dd>${labels.set}</dd></div>
                     <div><dt>Fixing</dt><dd>${labels.fixing}</dd></div>
                     <div><dt>Lip colour</dt><dd>${labels.lip}</dd></div>
                     <div><dt>Logo colour</dt><dd>${labels.logo}</dd></div>
                 </dl>
+                ${item.options?.request ? `<p class="basket-item-request"><strong>Special request:</strong> ${escapeHTML(item.options.request)}</p>` : ''}
                 <div class="basket-item-footer">
                     <label class="basket-qty-label">
                         <span>Qty</span>

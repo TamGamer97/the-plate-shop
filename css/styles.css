@@ -3523,3 +3523,108 @@ html {
 .plate-card:hover .plate-image img.plate-image-zoom {
     transform: scale(1.45);
 }
+
+/* Product options: tap-to-select pills */
+.pill-set {
+    border: none;
+    padding: 0;
+    margin-bottom: 1.25rem;
+}
+
+/* Match the other field labels on the product page */
+.pill-set legend {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #1f1f1f;
+    margin-bottom: 0.6rem;
+}
+
+.pill-set[hidden] {
+    display: none;
+}
+
+.pill-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.pill {
+    position: relative;
+    cursor: pointer;
+}
+
+.pill input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.pill span {
+    display: inline-block;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.1rem;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+    background: var(--primary-white);
+    font-weight: 500;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.pill em {
+    font-style: normal;
+    color: var(--text-gray);
+}
+
+.pill:hover span {
+    border-color: var(--primary-black);
+}
+
+.pill input:checked + span {
+    background: var(--primary-gold);
+    border-color: var(--primary-black);
+    font-weight: 700;
+}
+
+.pill input:checked + span em {
+    color: var(--primary-black);
+}
+
+.pill input:focus-visible + span {
+    outline: 2px solid var(--primary-black);
+    outline-offset: 2px;
+}
+
+.pill.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.field-hint {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin: 0.4rem 0 0.6rem;
+    line-height: 1.5;
+}
+
+.field-hint[hidden] {
+    display: none;
+}
+
+.reg-input {
+    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.6rem !important;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0.6rem 0.9rem !important;
+}
+
+.basket-item-request {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin: 0.5rem 0 0;
+}

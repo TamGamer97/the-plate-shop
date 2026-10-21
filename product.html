@@ -75,38 +75,20 @@
                             <h2 class="order-card-title">Customize This Product</h2>
 
                             <div class="form-group">
-                                <label for="productPlateSize">Plate Size</label>
-                                <select id="productPlateSize" name="plateSize" required>
-                                    <option value="standard">Standard 20.5"</option>
-                                    <option value="short-7">18" 7 Digit Short (+£5 per plate)</option>
-                                    <option value="short-6">16" 6 Digit Short (+£5 per plate)</option>
-                                    <option value="short-5">13" 5 Digit Short (+£5 per plate)</option>
-                                    <option value="oversize">Oversize 21" x 6" (+£10 per plate)</option>
-                                    <option value="custom">Custom Size (+£10 per plate)</option>
-                                </select>
+                                <label for="productPlateText">Registration Number</label>
+                                <p class="field-hint">Enter your registration with the exact spacing you want, e.g. <strong>AB12 CDE</strong>. We make it exactly as entered.</p>
+                                <input id="productPlateText" class="reg-input" name="plateText" type="text" required maxlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="AB12 CDE">
                             </div>
 
-                            <div class="form-group hidden-field" id="productCustomSizeGroup">
-                                <label for="productCustomSize">Custom Size (CM) <span class="label-optional">(+£10.00 per plate)</span></label>
-                                <input id="productCustomSize" name="customSize" type="text" placeholder="e.g. 52 x 11">
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="productPlateShape">Plate Shape</label>
-                                    <select id="productPlateShape" name="plateShape">
-                                        <option value="standard">Standard</option>
-                                        <option value="hex">Hex (+£7.50 per plate)</option>
-                                    </select>
+                            <fieldset class="form-group pill-set">
+                                <legend>Legal or Show Plate?</legend>
+                                <div class="pill-options">
+                                    <label class="pill"><input type="radio" name="plateType" value="legal" checked><span>Legal Plate</span></label>
+                                    <label class="pill"><input type="radio" name="plateType" value="show"><span>Show Plate</span></label>
                                 </div>
-                                <div class="form-group">
-                                    <label for="productBorder">Border</label>
-                                    <select id="productBorder" name="border">
-                                        <option value="none">No Border</option>
-                                        <option value="border">Border (+£2 per plate)</option>
-                                    </select>
-                                </div>
-                            </div>
+                                <p class="field-hint" id="productLegalNote">For road-legal plates we need to see your ID and V5C logbook (or certificate of entitlement) before we make them.</p>
+                                <p class="field-hint" id="productShowNote" hidden>Show plates are for shows and off-road use only. They can't be used on public roads.</p>
+                            </fieldset>
 
                             <fieldset class="form-group option-set quantity-option-set">
                                 <legend>How many plates do you need?</legend>
@@ -136,14 +118,57 @@
                                 <p class="pair-only-note" id="productPairOnlyNote" hidden>This style is only sold as a pair.</p>
                             </fieldset>
 
-                            <div class="form-group">
-                                <label for="productFixingKit">Fixing Kit</label>
-                                <select id="productFixingKit" name="fixingKit">
-                                    <option value="sticky">Sticky Pads (Free)</option>
-                                    <option value="screws">Screws Pack (+£2.00)</option>
-                                    <option value="none">Not Required</option>
-                                </select>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="productPlateSize">Plate Size</label>
+                                    <select id="productPlateSize" name="plateSize" required>
+                                        <option value="standard">Standard 20.5"</option>
+                                        <option value="short-7">18" 7 Digit Short (+£5 per plate)</option>
+                                        <option value="short-6">16" 6 Digit Short (+£5 per plate)</option>
+                                        <option value="short-5">13" 5 Digit Short (+£5 per plate)</option>
+                                        <option value="oversize">Oversize 21" x 6" (+£10 per plate)</option>
+                                        <option value="custom">Custom Size (+£10 per plate)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="productPlateShape">Plate Shape</label>
+                                    <select id="productPlateShape" name="plateShape">
+                                        <option value="standard">Standard</option>
+                                        <option value="hex">Hex (+£7.50 per plate)</option>
+                                    </select>
+                                </div>
                             </div>
+
+                            <div class="form-group hidden-field" id="productCustomSizeGroup">
+                                <label for="productCustomSize">Custom Size (CM)</label>
+                                <input id="productCustomSize" name="customSize" type="text" placeholder="e.g. 52 x 11">
+                            </div>
+
+                            <fieldset class="form-group pill-set">
+                                <legend>Border</legend>
+                                <div class="pill-options">
+                                    <label class="pill"><input type="radio" name="border" value="border"><span>Yes <em>(+£2 per plate)</em></span></label>
+                                    <label class="pill"><input type="radio" name="border" value="none" checked><span>Not Required</span></label>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="form-group pill-set" id="productTintGroup">
+                                <legend>Tinted</legend>
+                                <div class="pill-options">
+                                    <label class="pill"><input type="radio" name="tint" value="tinted"><span>Yes <em>(+£10)</em></span></label>
+                                    <label class="pill"><input type="radio" name="tint" value="none" checked><span>Not Required</span></label>
+                                </div>
+                                <p class="field-hint">Tinted plates are show plates only.</p>
+                            </fieldset>
+
+                            <fieldset class="form-group pill-set">
+                                <legend>Fixing Kit</legend>
+                                <div class="pill-options">
+                                    <label class="pill"><input type="radio" name="fixingKit" value="sticky" checked><span>Sticky Pads <em>(Free)</em></span></label>
+                                    <label class="pill"><input type="radio" name="fixingKit" value="screws"><span>Screw Pack <em>(+£2 per plate)</em></span></label>
+                                    <label class="pill"><input type="radio" name="fixingKit" value="none"><span>Not Required</span></label>
+                                </div>
+                            </fieldset>
 
                             <div class="form-row">
                                 <div class="form-group">
@@ -167,8 +192,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="productPlateText">Registration Text</label>
-                                <input id="productPlateText" name="plateText" type="text" required maxlength="10" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="AB12 CDE">
+                                <label for="productRequest">Special Request <span class="label-optional">(Optional)</span></label>
+                                <textarea id="productRequest" name="request" rows="3" maxlength="300" placeholder="Anything else we should know about these plates"></textarea>
                             </div>
                         </div>
 
@@ -189,6 +214,10 @@
                             <div class="summary-line summary-line--detail">
                                 <span>Border</span>
                                 <strong id="productSummaryBorder">£0.00</strong>
+                            </div>
+                            <div class="summary-line summary-line--detail">
+                                <span>Tint</span>
+                                <strong id="productSummaryTint">£0.00</strong>
                             </div>
                             <div class="summary-line summary-line--detail">
                                 <span>Fixing Kit</span>

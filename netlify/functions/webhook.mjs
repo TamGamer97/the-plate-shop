@@ -27,7 +27,10 @@ export default async (req) => {
             const meta = session.metadata || {};
             const items = Object.keys(meta)
                 .filter((key) => key.startsWith('item_'))
-                .map((key) => meta[key]);
+                .map((key) => {
+                    const request = meta[key.replace('item_', 'request_')];
+                    return request ? `${meta[key]} | Request: ${request}` : meta[key];
+                });
             console.log('New paid order', JSON.stringify({
                 session: session.id,
                 customer: meta.name,

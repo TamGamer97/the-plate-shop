@@ -35,7 +35,8 @@ export function linePrice(plate, opts) {
         + catalog.plateShapes[opts.plateShape].perPlate
         + catalog.borders[opts.border].perPlate
         + catalog.fixingKits[opts.fixingKit].perPlate;
-    return plate[qt.price] + extrasPerPlate * qt.plates;
+    // Tint is charged once per set, whether it's one plate or a pair
+    return plate[qt.price] + extrasPerPlate * qt.plates + catalog.tints[opts.tint].perSet;
 }
 
 function validateItem(item) {
@@ -49,6 +50,9 @@ function validateItem(item) {
         // Baskets saved before shape/border existed have neither, so default them
         plateShape: o.plateShape || 'standard',
         border: o.border || 'none',
+        plateType: o.plateType || (plate.showOnly ? 'show' : 'legal'),
+        tint: o.tint || 'none',
+        request: clean(o.request, 300),
         fixingKit: o.fixingKit,
         lipColour: o.lipColour,
         logoColour: o.logoColour,
@@ -61,6 +65,12 @@ function validateItem(item) {
     if (!catalog.plateSizes[opts.plateSize]) throw new OrderError(`Invalid plate size for ${plate.name}.`);
     if (!catalog.plateShapes[opts.plateShape]) throw new OrderError(`Invalid plate shape for ${plate.name}.`);
     if (!catalog.borders[opts.border]) throw new OrderError(`Invalid border option for ${plate.name}.`);
+    if (!catalog.plateTypes[opts.plateType]) throw new OrderError(`Please choose legal or show plate for ${plate.name}.`);
+    if (!catalog.tints[opts.tint]) throw new OrderError(`Invalid tint option for ${plate.name}.`);
+    if (plate.tintIncluded && opts.tint !== 'none') opts.tint = 'none';
+    if (opts.plateType === 'legal' && (plate.showOnly || opts.tint !== 'none')) {
+        throw new OrderError(`Tinted plates are show plates only. Please choose Show Plate for ${plate.name}.`);
+    }
     if (!catalog.fixingKits[opts.fixingKit]) throw new OrderError(`Invalid fixing kit for ${plate.name}.`);
     if (!catalog.lipColours[opts.lipColour]) throw new OrderError(`Invalid lip colour for ${plate.name}.`);
     if (!catalog.logoColours[opts.logoColour]) throw new OrderError(`Invalid logo colour for ${plate.name}.`);
@@ -142,7 +152,9 @@ export function describeItem(item) {
         catalog.quantityTypes[opts.quantityType].label,
         item.registration,
         size,
+        catalog.plateTypes[opts.plateType].label,
         `Shape: ${catalog.plateShapes[opts.plateShape].label}`,
+        catalog.tints[opts.tint].label,
         catalog.borders[opts.border].label,
         catalog.fixingKits[opts.fixingKit].label,
         `Lip: ${catalog.lipColours[opts.lipColour]}`,

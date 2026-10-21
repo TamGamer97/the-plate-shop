@@ -77,6 +77,7 @@ export default async (req) => {
     if (order.notes) metadata.notes = order.notes;
     order.items.forEach((item, i) => {
         metadata[`item_${i + 1}`] = describeItem(item).slice(0, 500);
+        if (item.opts.request) metadata[`request_${i + 1}`] = item.opts.request;
     });
 
     const base = siteUrl(req);
@@ -92,7 +93,7 @@ export default async (req) => {
 
     if (order.fulfilment === 'collection') {
         params.custom_text = {
-            submit: { message: 'Free click & collect. Same-day collection available. We will text you when your plates are ready.' },
+            submit: { message: `Free click & collect from ${catalog.collection.address}. Same-day collection available. We will text you when your plates are ready.` },
         };
     }
 

@@ -4,7 +4,7 @@
     "4d-acrylic":       { "name": "4D 3mm Acrylic Plates",          "single": 2499, "pair": 3999 },
     "4d-6mm":           { "name": "4D 6mm Acrylic Plates",          "single": null, "pair": 5500 },
     "acrylic-coloured": { "name": "Acrylic Coloured Plates",        "single": null, "pair": 7000 },
-    "tinted":           { "name": "Tinted Plates",                  "single": 2999, "pair": 5999 },
+    "tinted":           { "name": "Tinted Plates",                  "single": 2999, "pair": 5999, "showOnly": true, "tintIncluded": true },
     "4d-gel":           { "name": "4D Gel Plates",                  "single": 2999, "pair": 5000 },
     "4d-gel-6mm":       { "name": "4D Gel 6mm Plates",              "single": null, "pair": 6500 },
     "3d-gel":           { "name": "3D Gel Plates",                  "single": 2499, "pair": 3999 },
@@ -28,6 +28,14 @@
     "standard": { "label": "Standard",  "perPlate": 0 },
     "hex":      { "label": "Hex",       "perPlate": 750 }
   },
+  "plateTypes": {
+    "legal": { "label": "Legal Plate" },
+    "show":  { "label": "Show Plate" }
+  },
+  "tints": {
+    "none":   { "label": "No Tint", "perSet": 0 },
+    "tinted": { "label": "Tinted",  "perSet": 1000 }
+  },
   "borders": {
     "none":   { "label": "No Border", "perPlate": 0 },
     "border": { "label": "Border",    "perPlate": 200 }
@@ -48,6 +56,9 @@
     "red": "Red",
     "blue": "Blue",
     "gold": "Gold"
+  },
+  "collection": {
+    "address": "The Plate Shop, Oldham, OL2 5LW"
   },
   "fittingPerPlate": 999,
   "delivery": {
