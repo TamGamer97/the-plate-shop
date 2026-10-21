@@ -3518,11 +3518,6 @@ html {
     display: none;
 }
 
-/* The 3D gel photo is a circular crop: zoom in so the white corners are hidden */
-.plate-image img.plate-image-zoom,
-.plate-card:hover .plate-image img.plate-image-zoom {
-    transform: scale(1.45);
-}
 
 /* Product options: tap-to-select pills */
 .pill-set {
@@ -3627,4 +3622,34 @@ html {
     font-size: 0.85rem;
     color: var(--text-gray);
     margin: 0.5rem 0 0;
+}
+
+/* Plate photos are mostly portrait (3:4): a 4:5 frame shows nearly the whole photo */
+.plates-grid .plate-image {
+    height: auto;
+    aspect-ratio: 4 / 5;
+    background: var(--primary-white);
+}
+
+.plate-card:hover .plate-image img {
+    transform: scale(1.02);
+}
+
+/* Add-on photos vary in shape (the hex one is wide), so fit them whole */
+.plates-grid .plate-card--addon .plate-image {
+    aspect-ratio: 4 / 3;
+    background: #ececec;
+}
+
+.plate-card--addon .plate-image img {
+    object-fit: contain;
+}
+
+.product-media img {
+    height: 320px;
+}
+
+/* Circular photos are shown whole rather than cropped */
+.plate-image img.plate-image--fit {
+    object-fit: contain;
 }

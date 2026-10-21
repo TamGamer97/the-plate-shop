@@ -23,7 +23,7 @@ function loadPrices() {
 
 const PRODUCT_CATALOG = {
     '4d-acrylic': { name: '4D 3mm Acrylic Plates', image: 'images/4d-3mm-plates.webp', description: '3mm laser-cut acrylic characters raised off the plate for a sharp, solid edge.', features: ['3mm raised acrylic characters', 'Weather-resistant acrylic', 'Road legal options available'] },
-    '4d-6mm': { name: '4D 6mm Acrylic Plates', image: 'images/4d-6mm-plates.webp', description: 'Thicker 6mm acrylic characters for extra depth and a bold, chunky look.', features: ['6mm raised acrylic characters', 'Maximum depth', 'Sold as a pair'] },
+    '4d-6mm': { name: '4D 6mm Acrylic Plates', image: 'images/4d-6mm-plates.jpg', description: 'Thicker 6mm acrylic characters for extra depth and a bold, chunky look.', features: ['6mm raised acrylic characters', 'Maximum depth', 'Sold as a pair'] },
     'acrylic-coloured': { name: 'Acrylic Coloured Plates', image: 'images/acrylic-coloured-plates.webp', description: '4D acrylic characters with a coloured layer to match or contrast your car.', features: ['Coloured acrylic layer', 'Laser-cut 4D characters', 'Sold as a pair'] },
     tinted: { name: 'Tinted Plates', image: 'images/Tinted Plates.jpeg', description: 'Smoked finish for a sharp show-car appearance.', features: ['Smoked aesthetic', 'Premium finish', 'Show plates only'] },
     '4d-gel': { name: '4D Gel Plates', image: 'images/4d gell plates.jpg', description: 'Raised characters with a high-gloss gel finish for extra depth and shine.', features: ['High gloss finish', 'Raised character depth', 'Durable materials'] },
@@ -285,7 +285,7 @@ function repriceBasket() {
         const calc = calculateConfiguredPrice(item.productSlug, item.options || {});
         // e.g. a single plate of a style that is now pair-only: leave it for checkout to flag
         if (!calc.available) return item;
-        return { ...item, unitPrice: calc.total };
+        return { ...item, unitPrice: calc.total, image: PRODUCT_CATALOG[item.productSlug]?.image || item.image };
     });
     setBasket(basket);
 }
