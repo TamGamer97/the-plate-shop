@@ -3653,3 +3653,43 @@ html {
 .plate-image img.plate-image--fit {
     object-fit: contain;
 }
+
+/* ------------------------------------------------------------------
+   Plate photos are never cropped or zoomed, on any screen size.
+   Each photo is fitted whole inside its frame (object-fit: contain).
+   This block is last in the file so it wins over earlier rules,
+   including the mobile media queries above.
+   ------------------------------------------------------------------ */
+.plates-grid .plate-image {
+    background: #f4f4f4;
+}
+
+.plates-grid .plate-image img,
+.plate-card:hover .plate-image img {
+    object-fit: contain;
+    transform: none;
+}
+
+/* About and Services photos: show the whole photo at its natural shape */
+.about-image,
+.trust-image {
+    height: auto !important;
+    background: none;
+}
+
+.about-image img,
+.trust-image img {
+    height: auto;
+    max-height: 640px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* Product page photo: natural shape, whole image, on every screen size */
+.product-media img,
+.product-page .product-media img {
+    height: auto;
+    max-height: 420px;
+    aspect-ratio: auto;
+    object-fit: contain;
+}
