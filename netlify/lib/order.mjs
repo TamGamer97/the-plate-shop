@@ -54,7 +54,6 @@ function validateItem(item) {
         tint: o.tint || 'none',
         request: clean(o.request, 300),
         fixingKit: o.fixingKit,
-        lipColour: o.lipColour,
         logoColour: o.logoColour,
         customSize: clean(o.customSize, 40),
     };
@@ -72,7 +71,6 @@ function validateItem(item) {
         throw new OrderError(`Tinted plates are show plates only. Please choose Show Plate for ${plate.name}.`);
     }
     if (!catalog.fixingKits[opts.fixingKit]) throw new OrderError(`Invalid fixing kit for ${plate.name}.`);
-    if (!catalog.lipColours[opts.lipColour]) throw new OrderError(`Invalid lip colour for ${plate.name}.`);
     if (!catalog.logoColours[opts.logoColour]) throw new OrderError(`Invalid logo colour for ${plate.name}.`);
     if (opts.plateSize === 'custom' && !opts.customSize) throw new OrderError(`Please enter the custom size for ${plate.name}.`);
 
@@ -157,7 +155,6 @@ export function describeItem(item) {
         catalog.tints[opts.tint].label,
         catalog.borders[opts.border].label,
         catalog.fixingKits[opts.fixingKit].label,
-        `Lip: ${catalog.lipColours[opts.lipColour]}`,
         `Logo: ${catalog.logoColours[opts.logoColour]}`,
     ].join(' | ');
 }

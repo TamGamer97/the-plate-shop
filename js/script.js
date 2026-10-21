@@ -107,7 +107,6 @@ function formatBasketOptions(item) {
         tint: formatBasketLabel('tint', opts.tint || 'none'),
         set: formatBasketLabel('quantityType', opts.quantityType),
         fixing: formatBasketLabel('fixingKit', opts.fixingKit),
-        lip: formatBasketLabel('colour', opts.lipColour),
         logo: formatBasketLabel('colour', opts.logoColour)
     };
 }
@@ -636,7 +635,6 @@ function initProductPage() {
                 ...options,
                 customSize: customSizeInput.value.trim(),
                 request: document.getElementById('productRequest').value.trim(),
-                lipColour: document.getElementById('productLipColour').value,
                 logoColour: document.getElementById('productLogoColour').value
             },
             unitPrice: calc.total
@@ -790,7 +788,6 @@ function initBasketPage() {
                     <div><dt>Tint</dt><dd>${labels.tint}</dd></div>
                     <div><dt>Set</dt><dd>${labels.set}</dd></div>
                     <div><dt>Fixing</dt><dd>${labels.fixing}</dd></div>
-                    <div><dt>Lip colour</dt><dd>${labels.lip}</dd></div>
                     <div><dt>Logo colour</dt><dd>${labels.logo}</dd></div>
                 </dl>
                 ${item.options?.request ? `<p class="basket-item-request"><strong>Special request:</strong> ${escapeHTML(item.options.request)}</p>` : ''}

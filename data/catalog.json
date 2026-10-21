@@ -45,11 +45,6 @@
     "screws": { "label": "Screws Pack (+£2.00)", "perPlate": 200 },
     "none":   { "label": "Not Required",         "perPlate": 0 }
   },
-  "lipColours": {
-    "matte-black": "Matte Black",
-    "gloss-black": "Gloss Black",
-    "matte-grey": "Matte Grey"
-  },
   "logoColours": {
     "black": "Black",
     "white": "White",
