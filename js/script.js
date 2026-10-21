@@ -28,7 +28,7 @@ const PRODUCT_CATALOG = {
     tinted: { name: 'Tinted Plates', image: 'images/Tinted Plates.jpeg', description: 'Smoked finish for a sharp show-car appearance.', features: ['Smoked aesthetic', 'Premium finish', 'Show plates only'] },
     '4d-gel': { name: '4D Gel Plates', image: 'images/4d gell plates.jpg', description: 'Raised characters with a high-gloss gel finish for extra depth and shine.', features: ['High gloss finish', 'Raised character depth', 'Durable materials'] },
     '4d-gel-6mm': { name: '4D Gel 6mm Plates', image: 'images/4d-gel-6mm-plates.webp', description: '6mm raised characters finished with high-gloss gel for maximum depth and shine.', features: ['6mm raised characters', 'High-gloss gel finish', 'Sold as a pair'] },
-    '3d-gel': { name: '3D Gel Plates', image: 'images/3d-gel-plates.webp', description: 'Domed gel resin characters with a glossy, raised finish.', features: ['3D resin effect', 'UV resistant', 'Clean premium finish'] },
+    '3d-gel': { name: '3D Gel Plates', image: 'images/3d-gel-plates.jpg', description: 'Domed gel resin characters with a glossy, raised finish.', features: ['3D resin effect', 'UV resistant', 'Clean premium finish'] },
     '2d-standard': { name: 'Standard 2D Plates', image: 'images/Standard Plates.jpg', description: 'Classic and clean number plate style for daily use.', features: ['Clean 2D format', 'Budget-friendly', 'Reliable quality'] },
     retro: { name: 'Retro (Bevelled Effect) Plates', image: 'images/retro plates.jpeg', description: 'Retro bevel style with a premium old-school edge.', features: ['Bevelled look', 'Premium styling', 'Sold as a pair'] }
 };

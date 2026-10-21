@@ -3649,10 +3649,6 @@ html {
     height: 320px;
 }
 
-/* Circular photos are shown whole rather than cropped */
-.plate-image img.plate-image--fit {
-    object-fit: contain;
-}
 
 /* ------------------------------------------------------------------
    Plate photos are never cropped or zoomed, on any screen size.
