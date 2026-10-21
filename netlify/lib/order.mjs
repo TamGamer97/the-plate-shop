@@ -31,7 +31,10 @@ function clean(value, max) {
 // Price of one configured line (one set of plates), in pence
 export function linePrice(plate, opts) {
     const qt = catalog.quantityTypes[opts.quantityType];
-    const extrasPerPlate = catalog.plateSizes[opts.plateSize].perPlate + catalog.fixingKits[opts.fixingKit].perPlate;
+    const extrasPerPlate = catalog.plateSizes[opts.plateSize].perPlate
+        + catalog.plateShapes[opts.plateShape].perPlate
+        + catalog.borders[opts.border].perPlate
+        + catalog.fixingKits[opts.fixingKit].perPlate;
     return plate[qt.price] + extrasPerPlate * qt.plates;
 }
 
@@ -43,13 +46,21 @@ function validateItem(item) {
     const opts = {
         quantityType: o.quantityType,
         plateSize: o.plateSize,
+        // Baskets saved before shape/border existed have neither, so default them
+        plateShape: o.plateShape || 'standard',
+        border: o.border || 'none',
         fixingKit: o.fixingKit,
         lipColour: o.lipColour,
         logoColour: o.logoColour,
         customSize: clean(o.customSize, 40),
     };
     if (!catalog.quantityTypes[opts.quantityType]) throw new OrderError(`Please choose how many plates for ${plate.name}.`);
+    if (plate[catalog.quantityTypes[opts.quantityType].price] == null) {
+        throw new OrderError(`${plate.name} are only sold as a pair. Please edit this item and choose Front + Rear.`);
+    }
     if (!catalog.plateSizes[opts.plateSize]) throw new OrderError(`Invalid plate size for ${plate.name}.`);
+    if (!catalog.plateShapes[opts.plateShape]) throw new OrderError(`Invalid plate shape for ${plate.name}.`);
+    if (!catalog.borders[opts.border]) throw new OrderError(`Invalid border option for ${plate.name}.`);
     if (!catalog.fixingKits[opts.fixingKit]) throw new OrderError(`Invalid fixing kit for ${plate.name}.`);
     if (!catalog.lipColours[opts.lipColour]) throw new OrderError(`Invalid lip colour for ${plate.name}.`);
     if (!catalog.logoColours[opts.logoColour]) throw new OrderError(`Invalid logo colour for ${plate.name}.`);
@@ -131,6 +142,8 @@ export function describeItem(item) {
         catalog.quantityTypes[opts.quantityType].label,
         item.registration,
         size,
+        `Shape: ${catalog.plateShapes[opts.plateShape].label}`,
+        catalog.borders[opts.border].label,
         catalog.fixingKits[opts.fixingKit].label,
         `Lip: ${catalog.lipColours[opts.lipColour]}`,
         `Logo: ${catalog.logoColours[opts.logoColour]}`,

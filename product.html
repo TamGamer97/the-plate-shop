@@ -58,7 +58,7 @@
                         <h1 id="productTitle" class="product-title">4D Acrylic Plates</h1>
                         <p id="productDescription" class="product-description-page">Premium layered acrylic finish built for a standout look.</p>
                         <ul id="productFeatures" class="product-features"></ul>
-                        <div class="product-base-price">From <strong id="productBasePrice">£0.00</strong></div>
+                        <div class="product-base-price"><span id="productBaseLabel">From</span> <strong id="productBasePrice">£0.00</strong></div>
                     </div>
                     <div class="product-media">
                         <img id="productImage" src="images/4d Acrylic Plates.jpeg" alt="Selected plate product">
@@ -78,17 +78,34 @@
                                 <label for="productPlateSize">Plate Size</label>
                                 <select id="productPlateSize" name="plateSize" required>
                                     <option value="standard">Standard 20.5"</option>
-                                    <option value="short-7">18" (7 Digit Short)</option>
-                                    <option value="short-6">16" (6 Digit Short)</option>
-                                    <option value="short-5">13" (5 Digit Short)</option>
-                                    <option value="oversize">Oversize 21" x 6"</option>
-                                    <option value="custom">Custom Size</option>
+                                    <option value="short-7">18" 7 Digit Short (+£5 per plate)</option>
+                                    <option value="short-6">16" 6 Digit Short (+£5 per plate)</option>
+                                    <option value="short-5">13" 5 Digit Short (+£5 per plate)</option>
+                                    <option value="oversize">Oversize 21" x 6" (+£10 per plate)</option>
+                                    <option value="custom">Custom Size (+£10 per plate)</option>
                                 </select>
                             </div>
 
                             <div class="form-group hidden-field" id="productCustomSizeGroup">
                                 <label for="productCustomSize">Custom Size (CM) <span class="label-optional">(+£10.00 per plate)</span></label>
                                 <input id="productCustomSize" name="customSize" type="text" placeholder="e.g. 52 x 11">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="productPlateShape">Plate Shape</label>
+                                    <select id="productPlateShape" name="plateShape">
+                                        <option value="standard">Standard</option>
+                                        <option value="hex">Hex (+£7.50 per plate)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="productBorder">Border</label>
+                                    <select id="productBorder" name="border">
+                                        <option value="none">No Border</option>
+                                        <option value="border">Border (+£2 per plate)</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <fieldset class="form-group option-set quantity-option-set">
@@ -116,6 +133,7 @@
                                         </span>
                                     </label>
                                 </div>
+                                <p class="pair-only-note" id="productPairOnlyNote" hidden>This style is only sold as a pair.</p>
                             </fieldset>
 
                             <div class="form-group">
@@ -163,6 +181,14 @@
                             <div class="summary-line summary-line--detail">
                                 <span>Size Option</span>
                                 <strong id="productSummarySize">£0.00</strong>
+                            </div>
+                            <div class="summary-line summary-line--detail">
+                                <span>Hex Shape</span>
+                                <strong id="productSummaryShape">£0.00</strong>
+                            </div>
+                            <div class="summary-line summary-line--detail">
+                                <span>Border</span>
+                                <strong id="productSummaryBorder">£0.00</strong>
                             </div>
                             <div class="summary-line summary-line--detail">
                                 <span>Fixing Kit</span>

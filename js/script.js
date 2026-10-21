@@ -22,15 +22,15 @@ function loadPrices() {
 }
 
 const PRODUCT_CATALOG = {
-    '4d-acrylic': { name: '4D Acrylic Plates', image: 'images/4d Acrylic Plates.jpeg', description: 'Deep-cut acrylic layers for a bold, standout look.', features: ['Road legal options available', 'Weather-resistant acrylic', 'Premium layered finish'] },
-    'acrylic-coloured': { name: 'Acrylic Coloured Plates', image: 'images/Acrylic Coloured Plates.jpeg', description: 'A bold colour-accented style for a custom look.', features: ['Custom style accents', 'High-quality acrylic', 'Durable outdoor finish'] },
-    tinted: { name: 'Tinted Plates', image: 'images/Tinted Plates.jpeg', description: 'Smoked finish for a sharp show-car appearance.', features: ['Smoked aesthetic', 'Premium finish', 'Show style build'] },
-    short: { name: 'Short Plates', image: 'images/Short Plates.jpeg', description: 'Compact and stylish plates ideal for private registrations.', features: ['Compact format', 'Clean styling', 'Multiple size choices'] },
-    '4d-gel': { name: '4D Gel Plates', image: 'images/4d gell plates.jpg', description: 'Unmatched depth, shine, and premium style.', features: ['High gloss finish', 'Raised character depth', 'Durable materials'] },
-    '3d-gel': { name: '3D Gel Plates', image: 'images/3d gell plates.jpg', description: 'Sleek gel-character upgrade with premium look.', features: ['3D resin effect', 'UV resistant', 'Clean premium finish'] },
+    '4d-acrylic': { name: '4D 3mm Acrylic Plates', image: 'images/4d-3mm-plates.webp', description: '3mm laser-cut acrylic characters raised off the plate for a sharp, solid edge.', features: ['3mm raised acrylic characters', 'Weather-resistant acrylic', 'Road legal options available'] },
+    '4d-6mm': { name: '4D 6mm Acrylic Plates', image: 'images/4d-6mm-plates.webp', description: 'Thicker 6mm acrylic characters for extra depth and a bold, chunky look.', features: ['6mm raised acrylic characters', 'Maximum depth', 'Sold as a pair'] },
+    'acrylic-coloured': { name: 'Acrylic Coloured Plates', image: 'images/acrylic-coloured-plates.webp', description: '4D acrylic characters with a coloured layer to match or contrast your car.', features: ['Coloured acrylic layer', 'Laser-cut 4D characters', 'Sold as a pair'] },
+    tinted: { name: 'Tinted Plates', image: 'images/Tinted Plates.jpeg', description: 'Smoked finish for a sharp show-car appearance.', features: ['Smoked aesthetic', 'Premium finish', 'Show plates only'] },
+    '4d-gel': { name: '4D Gel Plates', image: 'images/4d gell plates.jpg', description: 'Raised characters with a high-gloss gel finish for extra depth and shine.', features: ['High gloss finish', 'Raised character depth', 'Durable materials'] },
+    '4d-gel-6mm': { name: '4D Gel 6mm Plates', image: 'images/4d-gel-6mm-plates.webp', description: '6mm raised characters finished with high-gloss gel for maximum depth and shine.', features: ['6mm raised characters', 'High-gloss gel finish', 'Sold as a pair'] },
+    '3d-gel': { name: '3D Gel Plates', image: 'images/3d-gel-plates.webp', description: 'Domed gel resin characters with a glossy, raised finish.', features: ['3D resin effect', 'UV resistant', 'Clean premium finish'] },
     '2d-standard': { name: 'Standard 2D Plates', image: 'images/Standard Plates.jpg', description: 'Classic and clean number plate style for daily use.', features: ['Clean 2D format', 'Budget-friendly', 'Reliable quality'] },
-    retro: { name: 'Retro (Bevelled Effect) Plates', image: 'images/retro plates.jpeg', description: 'Retro bevel style with a premium old-school edge.', features: ['Bevelled look', 'Premium styling', 'Distinctive finish'] },
-    hex: { name: 'Hex Plates', image: 'images/Hex Plates.jpg', description: 'Unique hexagonal style for a standout custom look.', features: ['Unique hex shape', 'Luxury custom style', 'Multiple finish compatibility'] }
+    retro: { name: 'Retro (Bevelled Effect) Plates', image: 'images/retro plates.jpeg', description: 'Retro bevel style with a premium old-school edge.', features: ['Bevelled look', 'Premium styling', 'Sold as a pair'] }
 };
 
 function formatGBP(value) {
@@ -45,6 +45,14 @@ const BASKET_LABELS = {
         'short-5': '13" (5 Digit Short)',
         oversize: 'Oversize 21" x 6"',
         custom: 'Custom Size'
+    },
+    plateShape: {
+        standard: 'Standard',
+        hex: 'Hex (+£7.50 per plate)'
+    },
+    border: {
+        none: 'No border',
+        border: 'Border (+£2.00 per plate)'
     },
     fixingKit: {
         sticky: 'Sticky Pads (Free)',
@@ -79,6 +87,8 @@ function formatBasketOptions(item) {
         : formatBasketLabel('plateSize', opts.plateSize);
     return {
         size: sizeLabel,
+        shape: formatBasketLabel('plateShape', opts.plateShape || 'standard'),
+        border: formatBasketLabel('border', opts.border || 'none'),
         set: formatBasketLabel('quantityType', opts.quantityType),
         fixing: formatBasketLabel('fixingKit', opts.fixingKit),
         lip: formatBasketLabel('colour', opts.lipColour),
@@ -227,14 +237,20 @@ function calculateConfiguredPrice(slug, options) {
     const plate = PRICES.plates[slug];
     const qt = PRICES.quantityTypes[options.quantityType] || PRICES.quantityTypes['rear-only'];
     const platesCost = plate[qt.price];
-    const sizeCost = (PRICES.plateSizes[options.plateSize]?.perPlate || 0) * qt.plates;
-    const fixingCost = (PRICES.fixingKits[options.fixingKit]?.perPlate || 0) * qt.plates;
+    const perPlate = (group, key) => (PRICES[group][key]?.perPlate || 0) * qt.plates;
+    const sizeCost = perPlate('plateSizes', options.plateSize);
+    const shapeCost = perPlate('plateShapes', options.plateShape || 'standard');
+    const borderCost = perPlate('borders', options.border || 'none');
+    const fixingCost = perPlate('fixingKits', options.fixingKit);
     return {
+        available: platesCost != null,
         platesCost: platesCost / 100,
         sizeCost: sizeCost / 100,
+        shapeCost: shapeCost / 100,
+        borderCost: borderCost / 100,
         fixingCost: fixingCost / 100,
         plates: qt.plates,
-        total: (platesCost + sizeCost + fixingCost) / 100
+        total: (platesCost + sizeCost + shapeCost + borderCost + fixingCost) / 100
     };
 }
 
@@ -247,7 +263,10 @@ function plateCountForItem(item) {
 function repriceBasket() {
     const basket = getBasket().map(item => {
         if (!PRICES.plates[item.productSlug]) return item;
-        return { ...item, unitPrice: calculateConfiguredPrice(item.productSlug, item.options || {}).total };
+        const calc = calculateConfiguredPrice(item.productSlug, item.options || {});
+        // e.g. a single plate of a style that is now pair-only: leave it for checkout to flag
+        if (!calc.available) return item;
+        return { ...item, unitPrice: calc.total };
     });
     setBasket(basket);
 }
@@ -456,11 +475,25 @@ function initProductPage() {
     document.getElementById('productDescription').textContent = product.description;
     document.getElementById('productImage').src = product.image;
     document.getElementById('productImage').alt = product.name;
-    document.getElementById('productBasePrice').textContent = formatGBP(PRICES.plates[slug].single / 100);
+    const plate = PRICES.plates[slug];
+    const pairOnly = plate.single == null;
+    document.getElementById('productBaseLabel').textContent = pairOnly ? 'Pair' : 'From';
+    document.getElementById('productBasePrice').textContent = formatGBP((pairOnly ? plate.pair : plate.single) / 100);
     document.querySelectorAll('[data-quantity-price]').forEach(node => {
         const qt = PRICES.quantityTypes[node.dataset.quantityPrice];
-        node.textContent = formatGBP(PRICES.plates[slug][qt.price] / 100);
+        const card = node.closest('.quantity-card');
+        if (plate[qt.price] == null) {
+            card.hidden = true;
+            card.querySelector('input').disabled = true;
+            return;
+        }
+        node.textContent = formatGBP(plate[qt.price] / 100);
     });
+    if (pairOnly) {
+        form.querySelector('input[name="quantityType"][value="front-back"]').checked = true;
+        form.querySelector('.quantity-cards').classList.add('quantity-cards--single');
+        document.getElementById('productPairOnlyNote').hidden = false;
+    }
     const featureList = document.getElementById('productFeatures');
     featureList.innerHTML = '';
     product.features.forEach(item => {
@@ -471,12 +504,16 @@ function initProductPage() {
 
     const sizeInput = document.getElementById('productPlateSize');
     const fixingInput = document.getElementById('productFixingKit');
+    const shapeInput = document.getElementById('productPlateShape');
+    const borderInput = document.getElementById('productBorder');
     const customSizeGroup = document.getElementById('productCustomSizeGroup');
     const customSizeInput = document.getElementById('productCustomSize');
     const successBox = document.getElementById('productAddSuccess');
 
     const summaryBase = document.getElementById('productSummaryBase');
     const summarySize = document.getElementById('productSummarySize');
+    const summaryShape = document.getElementById('productSummaryShape');
+    const summaryBorder = document.getElementById('productSummaryBorder');
     const summaryFixing = document.getElementById('productSummaryFixing');
     const summaryQuantity = document.getElementById('productSummaryQuantity');
     const summaryTotal = document.getElementById('productSummaryTotal');
@@ -491,6 +528,8 @@ function initProductPage() {
     function selectedOptions() {
         return {
             plateSize: sizeInput.value || 'standard',
+            plateShape: shapeInput.value || 'standard',
+            border: borderInput.value || 'none',
             fixingKit: fixingInput.value || 'sticky',
             quantityType: form.querySelector('input[name="quantityType"]:checked')?.value || 'rear-only'
         };
@@ -501,6 +540,8 @@ function initProductPage() {
         const calc = calculateConfiguredPrice(slug, options);
         summaryBase.textContent = formatGBP(calc.platesCost);
         summarySize.textContent = formatGBP(calc.sizeCost);
+        summaryShape.textContent = formatGBP(calc.shapeCost);
+        summaryBorder.textContent = formatGBP(calc.borderCost);
         summaryFixing.textContent = formatGBP(calc.fixingCost);
         summaryQuantity.textContent = calc.plates === 1 ? '1 plate' : `${calc.plates} plates`;
         summaryTotal.textContent = formatGBP(calc.total);
@@ -703,6 +744,8 @@ function initBasketPage() {
                 </a>
                 <dl class="basket-item-meta">
                     <div><dt>Size</dt><dd>${labels.size}</dd></div>
+                    <div><dt>Shape</dt><dd>${labels.shape}</dd></div>
+                    <div><dt>Border</dt><dd>${labels.border}</dd></div>
                     <div><dt>Set</dt><dd>${labels.set}</dd></div>
                     <div><dt>Fixing</dt><dd>${labels.fixing}</dd></div>
                     <div><dt>Lip colour</dt><dd>${labels.lip}</dd></div>
@@ -837,7 +880,13 @@ function initIndexPrices() {
     document.querySelectorAll('[data-price-for]').forEach(node => {
         const plate = PRICES.plates[node.dataset.priceFor];
         if (!plate) return;
-        node.innerHTML = `
+        node.innerHTML = plate.single == null
+            ? `
+            <span class="plate-price-label">Pair</span>
+            <span class="plate-price-main">${formatGBP(plate.pair / 100)}</span>
+            <span class="plate-price-pair">Front &amp; rear</span>
+        `
+            : `
             <span class="plate-price-label">From</span>
             <span class="plate-price-main">${formatGBP(plate.single / 100)}</span>
             <span class="plate-price-pair">${formatGBP(plate.pair / 100)} a pair</span>

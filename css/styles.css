@@ -3465,3 +3465,61 @@ html {
     margin-top: 0.35rem;
     min-height: 1.2em;
 }
+
+/* Add-on cards (short, hex) are for information only */
+.addons-title {
+    font-family: Clarkson, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin: 3rem 0 1.25rem;
+    color: var(--primary-black);
+}
+
+.plates-grid.plates-grid--addons {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
+    justify-content: center;
+}
+
+.plate-card--addon {
+    background: var(--light-gray);
+}
+
+.plate-card--addon:hover {
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+}
+
+.plate-card--addon:hover .plate-image img {
+    transform: none;
+}
+
+.plate-card--addon .plate-image {
+    height: 160px;
+}
+
+.plate-card--addon .plate-price {
+    min-height: 0;
+}
+
+.pair-only-note {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin-top: 0.5rem;
+}
+
+.quantity-cards.quantity-cards--single,
+.product-page .quantity-cards.quantity-cards--single {
+    grid-template-columns: minmax(0, 260px);
+}
+
+.quantity-card[hidden] {
+    display: none;
+}
+
+/* The 3D gel photo is a circular crop: zoom in so the white corners are hidden */
+.plate-image img.plate-image-zoom,
+.plate-card:hover .plate-image img.plate-image-zoom {
+    transform: scale(1.45);
+}

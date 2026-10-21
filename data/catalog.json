@@ -1,15 +1,15 @@
 {
   "currency": "gbp",
   "plates": {
-    "4d-acrylic":       { "name": "4D Acrylic Plates",              "single": 2499, "pair": 3999 },
-    "acrylic-coloured": { "name": "Acrylic Coloured Plates",        "single": 2999, "pair": 5999 },
+    "4d-acrylic":       { "name": "4D 3mm Acrylic Plates",          "single": 2499, "pair": 3999 },
+    "4d-6mm":           { "name": "4D 6mm Acrylic Plates",          "single": null, "pair": 5500 },
+    "acrylic-coloured": { "name": "Acrylic Coloured Plates",        "single": null, "pair": 7000 },
     "tinted":           { "name": "Tinted Plates",                  "single": 2999, "pair": 5999 },
-    "short":            { "name": "Short Plates",                   "single": 2999, "pair": 4999 },
-    "4d-gel":           { "name": "4D Gel Plates",                  "single": 2999, "pair": 5499 },
+    "4d-gel":           { "name": "4D Gel Plates",                  "single": 2999, "pair": 5000 },
+    "4d-gel-6mm":       { "name": "4D Gel 6mm Plates",              "single": null, "pair": 6500 },
     "3d-gel":           { "name": "3D Gel Plates",                  "single": 2499, "pair": 3999 },
     "2d-standard":      { "name": "Standard 2D Plates",             "single": 1499, "pair": 2499 },
-    "retro":            { "name": "Retro (Bevelled Effect) Plates", "single": 2499, "pair": 4999 },
-    "hex":              { "name": "Hex Plates",                     "single": 2999, "pair": 5999 }
+    "retro":            { "name": "Retro (Bevelled Effect) Plates", "single": null, "pair": 5500 }
   },
   "quantityTypes": {
     "rear-only":  { "label": "Rear Plate (1 plate)",       "plates": 1, "price": "single" },
@@ -18,11 +18,19 @@
   },
   "plateSizes": {
     "standard": { "label": "Standard 20.5\"",      "perPlate": 0 },
-    "short-7":  { "label": "18\" (7 Digit Short)", "perPlate": 400 },
-    "short-6":  { "label": "16\" (6 Digit Short)", "perPlate": 600 },
-    "short-5":  { "label": "13\" (5 Digit Short)", "perPlate": 800 },
+    "short-7":  { "label": "18\" (7 Digit Short)", "perPlate": 500 },
+    "short-6":  { "label": "16\" (6 Digit Short)", "perPlate": 500 },
+    "short-5":  { "label": "13\" (5 Digit Short)", "perPlate": 500 },
     "oversize": { "label": "Oversize 21\" x 6\"",  "perPlate": 1000 },
     "custom":   { "label": "Custom Size",          "perPlate": 1000 }
+  },
+  "plateShapes": {
+    "standard": { "label": "Standard",  "perPlate": 0 },
+    "hex":      { "label": "Hex",       "perPlate": 750 }
+  },
+  "borders": {
+    "none":   { "label": "No Border", "perPlate": 0 },
+    "border": { "label": "Border",    "perPlate": 200 }
   },
   "fixingKits": {
     "sticky": { "label": "Sticky Pads (Free)",   "perPlate": 0 },
