@@ -26,7 +26,7 @@ const PRODUCT_CATALOG = {
     '4d-6mm': { name: '4D 6mm Acrylic Plates', image: 'images/4d-6mm-plates.jpg', description: 'Thicker 6mm acrylic characters for extra depth and a bold, chunky look.', features: ['6mm raised acrylic characters', 'Maximum depth', 'Sold as a pair'] },
     'acrylic-coloured': { name: 'Acrylic Coloured Plates', image: 'images/acrylic-coloured-plates.webp', description: '4D acrylic characters with a coloured layer to match or contrast your car.', features: ['Coloured acrylic layer', 'Laser-cut 4D characters', 'Sold as a pair'] },
     tinted: { name: 'Tinted Plates', image: 'images/Tinted Plates.jpeg', description: 'Smoked finish for a sharp show-car appearance.', features: ['Smoked aesthetic', 'Premium finish', 'Show plates only'] },
-    '4d-gel': { name: '4D Gel Plates', image: 'images/4d gell plates.jpg', description: 'Raised characters with a high-gloss gel finish for extra depth and shine.', features: ['High gloss finish', 'Raised character depth', 'Durable materials'] },
+    '4d-gel': { name: '4D Gel Plates', image: 'images/4d-gel-plates.webp', description: 'Raised characters with a high-gloss gel finish for extra depth and shine.', features: ['High gloss finish', 'Raised character depth', 'Durable materials'] },
     '4d-gel-6mm': { name: '4D Gel 6mm Plates', image: 'images/4d-gel-6mm-plates.webp', description: '6mm raised characters finished with high-gloss gel for maximum depth and shine.', features: ['6mm raised characters', 'High-gloss gel finish', 'Sold as a pair'] },
     '3d-gel': { name: '3D Gel Plates', image: 'images/3d-gel-plates.jpg', description: 'Domed gel resin characters with a glossy, raised finish.', features: ['3D resin effect', 'UV resistant', 'Clean premium finish'] },
     '2d-standard': { name: 'Standard 2D Plates', image: 'images/Standard Plates.jpg', description: 'Classic and clean number plate style for daily use.', features: ['Clean 2D format', 'Budget-friendly', 'Reliable quality'] },
@@ -50,11 +50,9 @@ const BASKET_LABELS = {
         'short-6': '16" (6 Digit Short)',
         'short-5': '13" (5 Digit Short)',
         oversize: 'Oversize 21" x 6"',
+        square: 'Square',
+        hex: 'Hex',
         custom: 'Custom Size'
-    },
-    plateShape: {
-        standard: 'Standard',
-        hex: 'Hex (+£7.50 per plate)'
     },
     border: {
         none: 'No border',
@@ -94,14 +92,23 @@ function formatBasketLabel(group, value) {
     return BASKET_LABELS[group]?.[value] || value || '—';
 }
 
+// Mirrors the server: older basket items have one plateSize (and maybe a hex plateShape)
+function basketItemSizes(opts) {
+    const legacy = opts.plateShape === 'hex' ? 'hex' : (opts.plateSize || 'standard');
+    return { front: opts.frontSize || legacy, rear: opts.rearSize || legacy };
+}
+
 function formatBasketOptions(item) {
     const opts = item.options || {};
-    const sizeLabel = opts.plateSize === 'custom' && opts.customSize
-        ? `Custom (${opts.customSize})`
-        : formatBasketLabel('plateSize', opts.plateSize);
+    const sizes = basketItemSizes(opts);
+    const label = (key) => (key === 'custom' && opts.customSize ? `Custom (${opts.customSize})` : formatBasketLabel('plateSize', key));
+    const qt = opts.quantityType;
+    const sizeText = qt === 'front-only' ? label(sizes.front)
+        : qt === 'rear-only' ? label(sizes.rear)
+        : sizes.front === sizes.rear ? label(sizes.front)
+        : `Front: ${label(sizes.front)}, Rear: ${label(sizes.rear)}`;
     return {
-        size: sizeLabel,
-        shape: formatBasketLabel('plateShape', opts.plateShape || 'standard'),
+        size: sizeText,
         border: formatBasketLabel('border', opts.border || 'none'),
         plateType: formatBasketLabel('plateType', opts.plateType || 'legal'),
         tint: formatBasketLabel('tint', opts.tint || 'none'),
@@ -253,8 +260,9 @@ function calculateConfiguredPrice(slug, options) {
     const qt = PRICES.quantityTypes[options.quantityType] || PRICES.quantityTypes['rear-only'];
     const platesCost = plate[qt.price];
     const perPlate = (group, key) => (PRICES[group][key]?.perPlate || 0) * qt.plates;
-    const sizeCost = perPlate('plateSizes', options.plateSize);
-    const shapeCost = perPlate('plateShapes', options.plateShape || 'standard');
+    const sizes = basketItemSizes(options);
+    const sides = qt.sides || ['front', 'rear'].slice(0, qt.plates);
+    const sizeCost = sides.reduce((sum, side) => sum + (PRICES.plateSizes[sizes[side]]?.perPlate || 0), 0);
     const borderCost = perPlate('borders', options.border || 'none');
     const fixingCost = perPlate('fixingKits', options.fixingKit);
     // Tint is charged once per set (mirrors linePrice() on the server)
@@ -263,12 +271,11 @@ function calculateConfiguredPrice(slug, options) {
         available: platesCost != null,
         platesCost: platesCost / 100,
         sizeCost: sizeCost / 100,
-        shapeCost: shapeCost / 100,
         borderCost: borderCost / 100,
         fixingCost: fixingCost / 100,
         tintCost: tintCost / 100,
         plates: qt.plates,
-        total: (platesCost + sizeCost + shapeCost + borderCost + fixingCost + tintCost) / 100
+        total: (platesCost + sizeCost + borderCost + fixingCost + tintCost) / 100
     };
 }
 
@@ -520,8 +527,8 @@ function initProductPage() {
         featureList.appendChild(li);
     });
 
-    const sizeInput = document.getElementById('productPlateSize');
-    const shapeInput = document.getElementById('productPlateShape');
+    const frontSizeInput = document.getElementById('productFrontSize');
+    const rearSizeInput = document.getElementById('productRearSize');
     const legalInput = form.querySelector('input[name="plateType"][value="legal"]');
     const showInput = form.querySelector('input[name="plateType"][value="show"]');
     const tintGroup = document.getElementById('productTintGroup');
@@ -532,7 +539,6 @@ function initProductPage() {
 
     const summaryBase = document.getElementById('productSummaryBase');
     const summarySize = document.getElementById('productSummarySize');
-    const summaryShape = document.getElementById('productSummaryShape');
     const summaryBorder = document.getElementById('productSummaryBorder');
     const summaryTint = document.getElementById('productSummaryTint');
     const summaryFixing = document.getElementById('productSummaryFixing');
@@ -548,8 +554,8 @@ function initProductPage() {
 
     function selectedOptions() {
         return {
-            plateSize: sizeInput.value || 'standard',
-            plateShape: shapeInput.value || 'standard',
+            frontSize: frontSizeInput.value || 'standard',
+            rearSize: rearSizeInput.value || 'standard',
             border: radioValue('border', 'none'),
             plateType: radioValue('plateType', 'legal'),
             tint: plate.tintIncluded ? 'none' : radioValue('tint', 'none'),
@@ -563,7 +569,6 @@ function initProductPage() {
         const calc = calculateConfiguredPrice(slug, options);
         summaryBase.textContent = formatGBP(calc.platesCost);
         summarySize.textContent = formatGBP(calc.sizeCost);
-        summaryShape.textContent = formatGBP(calc.shapeCost);
         summaryBorder.textContent = formatGBP(calc.borderCost);
         summaryTint.textContent = formatGBP(calc.tintCost);
         summaryFixing.textContent = formatGBP(calc.fixingCost);
@@ -573,8 +578,21 @@ function initProductPage() {
         return calc;
     }
 
+    // Only show the size/shape selects for the plates being ordered
+    function syncSizeFields() {
+        const qt = radioValue('quantityType', 'front-back');
+        document.getElementById('productFrontSizeGroup').hidden = qt === 'rear-only';
+        document.getElementById('productRearSizeGroup').hidden = qt === 'front-only';
+    }
+
+    function customSizeChosen() {
+        const qt = radioValue('quantityType', 'front-back');
+        return (qt !== 'rear-only' && frontSizeInput.value === 'custom')
+            || (qt !== 'front-only' && rearSizeInput.value === 'custom');
+    }
+
     function toggleCustomSize() {
-        if (sizeInput.value === 'custom') {
+        if (customSizeChosen()) {
             customSizeGroup.style.display = 'block';
             customSizeInput.required = true;
         } else {
@@ -597,6 +615,7 @@ function initProductPage() {
 
     form.addEventListener('change', event => {
         if (event.target.name === 'quantityType') syncQuantityCards(form);
+        syncSizeFields();
         toggleCustomSize();
         syncPlateType();
         updatePrice();
@@ -615,7 +634,7 @@ function initProductPage() {
             scrollProductFeedbackIntoView();
             return;
         }
-        if (sizeInput.value === 'custom' && !customSizeInput.value.trim()) {
+        if (customSizeChosen() && !customSizeInput.value.trim()) {
             successBox.classList.add('visible');
             successBox.textContent = 'Please enter your custom plate size.';
             scrollProductFeedbackIntoView();
@@ -648,6 +667,7 @@ function initProductPage() {
 
     if (plate.tintIncluded) tintGroup.hidden = true;
     syncQuantityCards(form);
+    syncSizeFields();
     toggleCustomSize();
     syncPlateType();
     updatePrice();
@@ -782,8 +802,7 @@ function initBasketPage() {
                 </a>
                 <dl class="basket-item-meta">
                     <div><dt>Type</dt><dd>${labels.plateType}</dd></div>
-                    <div><dt>Size</dt><dd>${labels.size}</dd></div>
-                    <div><dt>Shape</dt><dd>${labels.shape}</dd></div>
+                    <div><dt>Size/Shape</dt><dd>${labels.size}</dd></div>
                     <div><dt>Border</dt><dd>${labels.border}</dd></div>
                     <div><dt>Tint</dt><dd>${labels.tint}</dd></div>
                     <div><dt>Set</dt><dd>${labels.set}</dd></div>

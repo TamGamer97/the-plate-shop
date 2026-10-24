@@ -119,22 +119,30 @@
                             </fieldset>
 
                             <div class="form-row">
-                                <div class="form-group">
-                                    <label for="productPlateSize">Plate Size</label>
-                                    <select id="productPlateSize" name="plateSize" required>
+                                <div class="form-group" id="productFrontSizeGroup">
+                                    <label for="productFrontSize">Front Plate Size/Shape</label>
+                                    <select id="productFrontSize" name="frontSize" required>
                                         <option value="standard">Standard 20.5"</option>
-                                        <option value="short-7">18" 7 Digit Short (+£5 per plate)</option>
-                                        <option value="short-6">16" 6 Digit Short (+£5 per plate)</option>
-                                        <option value="short-5">13" 5 Digit Short (+£5 per plate)</option>
-                                        <option value="oversize">Oversize 21" x 6" (+£10 per plate)</option>
-                                        <option value="custom">Custom Size (+£10 per plate)</option>
+                                        <option value="short-7">18" 7 Digit Short (+£5)</option>
+                                        <option value="short-6">16" 6 Digit Short (+£5)</option>
+                                        <option value="short-5">13" 5 Digit Short (+£5)</option>
+                                        <option value="square">Square (+£5)</option>
+                                        <option value="hex">Hex (+£7.50)</option>
+                                        <option value="oversize">Oversize 21" x 6" (+£10)</option>
+                                        <option value="custom">Custom Size (+£10)</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="productPlateShape">Plate Shape</label>
-                                    <select id="productPlateShape" name="plateShape">
-                                        <option value="standard">Standard</option>
-                                        <option value="hex">Hex (+£7.50 per plate)</option>
+                                <div class="form-group" id="productRearSizeGroup">
+                                    <label for="productRearSize">Rear Plate Size/Shape</label>
+                                    <select id="productRearSize" name="rearSize" required>
+                                        <option value="standard">Standard 20.5"</option>
+                                        <option value="short-7">18" 7 Digit Short (+£5)</option>
+                                        <option value="short-6">16" 6 Digit Short (+£5)</option>
+                                        <option value="short-5">13" 5 Digit Short (+£5)</option>
+                                        <option value="square">Square (+£5)</option>
+                                        <option value="hex">Hex (+£7.50)</option>
+                                        <option value="oversize">Oversize 21" x 6" (+£10)</option>
+                                        <option value="custom">Custom Size (+£10)</option>
                                     </select>
                                 </div>
                             </div>
@@ -194,12 +202,8 @@
                                 <strong id="productSummaryBase">£0.00</strong>
                             </div>
                             <div class="summary-line summary-line--detail">
-                                <span>Size Option</span>
+                                <span>Size/Shape</span>
                                 <strong id="productSummarySize">£0.00</strong>
-                            </div>
-                            <div class="summary-line summary-line--detail">
-                                <span>Hex Shape</span>
-                                <strong id="productSummaryShape">£0.00</strong>
                             </div>
                             <div class="summary-line summary-line--detail">
                                 <span>Border</span>

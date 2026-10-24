@@ -31,12 +31,11 @@ function clean(value, max) {
 // Price of one configured line (one set of plates), in pence
 export function linePrice(plate, opts) {
     const qt = catalog.quantityTypes[opts.quantityType];
-    const extrasPerPlate = catalog.plateSizes[opts.plateSize].perPlate
-        + catalog.plateShapes[opts.plateShape].perPlate
-        + catalog.borders[opts.border].perPlate
-        + catalog.fixingKits[opts.fixingKit].perPlate;
+    // Front and rear plates each have their own size/shape
+    const sizes = qt.sides.reduce((sum, side) => sum + catalog.plateSizes[opts.sizes[side]].perPlate, 0);
+    const extrasPerPlate = catalog.borders[opts.border].perPlate + catalog.fixingKits[opts.fixingKit].perPlate;
     // Tint is charged once per set, whether it's one plate or a pair
-    return plate[qt.price] + extrasPerPlate * qt.plates + catalog.tints[opts.tint].perSet;
+    return plate[qt.price] + sizes + extrasPerPlate * qt.plates + catalog.tints[opts.tint].perSet;
 }
 
 function validateItem(item) {
@@ -44,11 +43,11 @@ function validateItem(item) {
     if (!plate) throw new OrderError('Your basket contains a product we no longer sell. Please remove it.');
 
     const o = item.options || {};
+    // Baskets saved before front/rear sizes existed have one plateSize (and maybe a hex plateShape)
+    const legacySize = o.plateShape === 'hex' ? 'hex' : (o.plateSize || 'standard');
     const opts = {
         quantityType: o.quantityType,
-        plateSize: o.plateSize,
-        // Baskets saved before shape/border existed have neither, so default them
-        plateShape: o.plateShape || 'standard',
+        sizes: { front: o.frontSize || legacySize, rear: o.rearSize || legacySize },
         border: o.border || 'none',
         plateType: o.plateType || (plate.showOnly ? 'show' : 'legal'),
         tint: o.tint || 'none',
@@ -61,8 +60,10 @@ function validateItem(item) {
     if (plate[catalog.quantityTypes[opts.quantityType].price] == null) {
         throw new OrderError(`${plate.name} are only sold as a pair. Please edit this item and choose Front + Rear.`);
     }
-    if (!catalog.plateSizes[opts.plateSize]) throw new OrderError(`Invalid plate size for ${plate.name}.`);
-    if (!catalog.plateShapes[opts.plateShape]) throw new OrderError(`Invalid plate shape for ${plate.name}.`);
+    const sides = catalog.quantityTypes[opts.quantityType].sides;
+    for (const side of sides) {
+        if (!catalog.plateSizes[opts.sizes[side]]) throw new OrderError(`Invalid ${side} plate size/shape for ${plate.name}.`);
+    }
     if (!catalog.borders[opts.border]) throw new OrderError(`Invalid border option for ${plate.name}.`);
     if (!catalog.plateTypes[opts.plateType]) throw new OrderError(`Please choose legal or show plate for ${plate.name}.`);
     if (!catalog.tints[opts.tint]) throw new OrderError(`Invalid tint option for ${plate.name}.`);
@@ -72,7 +73,9 @@ function validateItem(item) {
     }
     if (!catalog.fixingKits[opts.fixingKit]) throw new OrderError(`Invalid fixing kit for ${plate.name}.`);
     if (!catalog.logoColours[opts.logoColour]) throw new OrderError(`Invalid logo colour for ${plate.name}.`);
-    if (opts.plateSize === 'custom' && !opts.customSize) throw new OrderError(`Please enter the custom size for ${plate.name}.`);
+    if (sides.some((side) => opts.sizes[side] === 'custom') && !opts.customSize) {
+        throw new OrderError(`Please enter the custom size for ${plate.name}.`);
+    }
 
     const registration = clean(item.plateText, 20).toUpperCase();
     if (!REG_PATTERN.test(registration)) {
@@ -142,16 +145,15 @@ export function validateOrder(body) {
 
 export function describeItem(item) {
     const { opts } = item;
-    const size = opts.plateSize === 'custom'
-        ? `Custom (${opts.customSize})`
-        : catalog.plateSizes[opts.plateSize].label;
+    const sizeLabel = (key) => (key === 'custom' ? `Custom (${opts.customSize})` : catalog.plateSizes[key].label);
+    const sizes = catalog.quantityTypes[opts.quantityType].sides
+        .map((side) => `${side === 'front' ? 'Front' : 'Rear'}: ${sizeLabel(opts.sizes[side])}`);
     return [
         `${item.quantity} x ${item.plate.name}`,
         catalog.quantityTypes[opts.quantityType].label,
         item.registration,
-        size,
+        ...sizes,
         catalog.plateTypes[opts.plateType].label,
-        `Shape: ${catalog.plateShapes[opts.plateShape].label}`,
         catalog.tints[opts.tint].label,
         catalog.borders[opts.border].label,
         catalog.fixingKits[opts.fixingKit].label,

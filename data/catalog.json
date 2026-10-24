@@ -12,9 +12,9 @@
     "retro":            { "name": "Retro (Bevelled Effect) Plates", "single": null, "pair": 5500 }
   },
   "quantityTypes": {
-    "rear-only":  { "label": "Rear Plate (1 plate)",       "plates": 1, "price": "single" },
-    "front-only": { "label": "Front Plate (1 plate)",      "plates": 1, "price": "single" },
-    "front-back": { "label": "Front + Rear (2 plates)",    "plates": 2, "price": "pair" }
+    "rear-only":  { "label": "Rear Plate (1 plate)",       "plates": 1, "price": "single", "sides": ["rear"] },
+    "front-only": { "label": "Front Plate (1 plate)",      "plates": 1, "price": "single", "sides": ["front"] },
+    "front-back": { "label": "Front + Rear (2 plates)",    "plates": 2, "price": "pair",   "sides": ["front", "rear"] }
   },
   "plateSizes": {
     "standard": { "label": "Standard 20.5\"",      "perPlate": 0 },
@@ -22,11 +22,9 @@
     "short-6":  { "label": "16\" (6 Digit Short)", "perPlate": 500 },
     "short-5":  { "label": "13\" (5 Digit Short)", "perPlate": 500 },
     "oversize": { "label": "Oversize 21\" x 6\"",  "perPlate": 1000 },
+    "square":   { "label": "Square",               "perPlate": 500 },
+    "hex":      { "label": "Hex",                  "perPlate": 750 },
     "custom":   { "label": "Custom Size",          "perPlate": 1000 }
-  },
-  "plateShapes": {
-    "standard": { "label": "Standard",  "perPlate": 0 },
-    "hex":      { "label": "Hex",       "perPlate": 750 }
   },
   "plateTypes": {
     "legal": { "label": "Legal Plate" },
